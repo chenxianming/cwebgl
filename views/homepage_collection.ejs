@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<%- include head %>
+</head>
+    <body>
+        <%- include header %>
+        
+        <%- include user %>
+        
+        <div class="wrap">
+            <div class="homepage">
+                <div class="homepage-left w260">
+                    <div class="homepage-title">
+                        <i class="lnr lnr-user"></i><span>我的主页</span>
+                    </div>
+                    <%- include menu %>
+                </div>
+                <div class="fr w758">
+                    <div class="pd30" style="padding-top:0">
+                        <div class="homepage-c">
+                            <ul>
+                                
+                                <li<%- (detail.type == 'article') ? ' class=cur' : '' %>><a href="/user/collections?t=article">文章</a></li>
+                                
+                                <li<%- (detail.type == 'website') ? ' class=cur' : '' %>><a href="/user/collections?t=website">酷站</a></li>
+                                
+                                <li<%- (detail.type == 'code') ? ' class=cur' : '' %>><a href="/user/collections?t=code">代码</a></li>
+                                
+                                <li<%- (detail.type == 'topic') ? ' class=cur' : '' %>><a href="/user/collections?t=topic">热帖</a></li>
+                                
+                            </ul>
+                            <div class="homepage-send-btn btn new-collections">新增</div>
+                        </div>
+                        
+                               
+                        <div class="homepage-list-infomation">
+                            <% let typeStr = '',
+                                   map = [
+                                       {
+                                            name:'article',
+                                            map:'文章'
+                                       },
+                                       {
+                                            name:'website',
+                                            map:'酷站'
+                                       },
+                                       {
+                                            name:'code',
+                                            map:'代码'
+                                       },
+                                       {
+                                            name:'topic',
+                                            map:'热帖'
+                                       },
+                                   ];
+
+                                   map.forEach( (mp) => {
+                                        ( mp.name == detail.type ) && ( typeStr = mp.map );
+                                   } );
+                            %>
+                            <h2>
+                                <span>当前收藏夹<b class="orange"><%= detail.name %></b></span>
+                                <span>类型<b class="orange"><%= typeStr %></b></span>
+                            </h2>
+                            <p><%= detail.description %></p>
+                            <div class="homepage-list-infomation-action">
+                                <div class="homepage-list-infomation-action-btn btn edit-collections" data-uuid="<%= detail.uuid %>">编辑</div><div class="homepage-list-infomation-action-btn btn event-delete" data-type="collections" data-uuid="<%= detail.uuid %>">删除</div>
+                            </div>
+                        </div>   
+                        
+                        <div class="homepage-list">
+
+                            <% if(detail.type=='article'){ %>
+                            
+                            <% data.result.forEach( (dt) => { %>
+                            <% let data = dt.detail; %>
+                            <div class="homepage-list-article">
+                                <a href="/article/<%= data.uuid %>.html"><%- data.status=='pending' ? '<b style="margin-right:10px;" class=orange>正在审核</b>' : '' %><%= data.title %></a>
+                                <div class="display">
+                                    <div class="display-item"><i class="lnr lnr-eye"></i><span><%= data.views %></span></div><div class="display-item"><i class="lnr lnr-bubble"></i><span><%= data.comment %></span></div><div class="display-item"><i class="lnr lnr-history"></i><span><%= data.postDate %></span></div>
+                                </div>
+                                <div class="homepage-list-article-action">
+                                    <div class="homepage-list-article-action-remove btn collect-event isCollected" data-uuid="<%= data.uuid %>" data-type="article">
+                                        <i class="lnr lnr-star-empty"></i><span>取消收藏</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } ); %>
+                            
+                            <% } %>
+                            
+                            <% if(detail.type=='website'){ %>
+
+                            <% data.result.forEach( (dt) => { %>
+                            <% let data = dt.detail; %>
+                            <div class="homepage-list-website">
+                                <div class="websitelist-item" data-item="<%= data.uuid %>">
+                                    <div class="websitelist-item-img">
+                                        <img src="<%= data.litpic || '/website_default.png' %>" />
+                                        <div class="websitelist-item-img-active">
+                                            <div class="websitelist-item-img-active-link btn">
+                                                <a class="website-view" data-uuid="<%= data.uuid %>" title="直接访问" target="_blank" href="http://<%= data.link %>"><i class="lnr-link lnr"></i></a>
+                                            </div>
+                                            <div class="view-detail btn">
+                                                <a href="/website/<%= data.uuid %>.html" title="查看该网站">
+                                                    <i class="lnr-select lnr"></i><span>查看该网站</span>
+                                                </a>
+                                            </div>
+                                            
+                                            <div class="websitelist-item-img-active-collection btn collect-event isCollected" data-uuid="<%= data.uuid %>" data-type="website">
+                                                <i class="lnr lnr-star-empty"></i><span>取消收藏</span>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } ); %>
+                            
+                            <% } %>
+                            
+                            
+                            <% if(detail.type=='code'){ %>
+                            
+                            <% data.result.forEach( (dt) => { %>
+                            <% let data = dt.detail; %>
+                            
+                            <div class="homepage-list-website">
+                               
+                                <div class="websitelist-item" data-item="<%= data.uuid %>">
+                                    <div class="websitelist-item-img">
+                                        <img src="<%= data.litpic || '/code_default.png' %>" />
+                                        
+                                        <div class="websitelist-item-img-active">
+                                           
+                                            <div class="websitelist-item-img-active-collection btn collect-event isCollected" data-uuid="<%= data.uuid %>" data-type="code">
+                                                <i class="lnr lnr-star-empty"></i><span>取消收藏</span>
+                                            </div>
+                                           
+                                            <div class="view-detail btn">
+                                                <a href="/code/<%= data.uuid %>" title="查看代码">
+                                                    <i class="lnr-select lnr"></i><span>查看该代码</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <% } ) %>
+                            
+                            <% } %>
+                            
+                            <% if(detail.type=='topic'){ %>
+                            
+                            <% data.result.forEach( (dt) => { %>
+                            
+                            <% let data = dt.detail; %>
+                            <div class="homepage-list-article">
+                                <a href="/community/<%= data.uuid %>.html"><%- data.status=='pending' ? '<b style="margin-right:10px;" class=orange>正在审核</b>' : '' %><%= data.title %></a>
+                                <div class="display">
+                                    <div class="display-item"><i class="lnr lnr-eye"></i><span><%= data.views %></span></div><div class="display-item"><i class="lnr lnr-bubble"></i><span><%= (data.threadCount-1) %></span></div><div class="display-item"><i class="lnr lnr-history"></i><span>最后回复：<%= data.sortDate %></span></div>
+                                </div>
+                                <div class="homepage-list-article-action">
+                                    <div class="homepage-list-article-action-remove btn collect-event isCollected" data-uuid="<%= data.uuid %>" data-type="topic">
+                                        <i class="lnr lnr-star-empty"></i><span>取消收藏</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <% } ); %>
+                            
+                            
+                            <% } %>
+                            
+                            <% if(!data.result.length){ %>
+                            <div class="homepage-list-display">暂无信息</div>
+                            <% } %>
+                        </div>
+                        
+                        <% 
+                            let page = [];
+                            let count = data.count;
+                            let last = Math.ceil( data.count / (data.limit || 12) );
+                            let cur = (data.offset);
+
+                            let range = [];
+
+                            if(cur>=3){
+                                range.push(cur-3);
+                                range.push( (cur+2 > last) ? last : (cur+2) );
+                            }else{
+                                range.push(0);
+                                range.push( (4 > last) ? last : (4) );
+                            }
+
+                            for(let i = range[0];i<range[1];i++){
+                                page.push(i+1);
+                            }
+
+                        %>
+
+                        <div id="page">
+                            <ul>
+                                <% if(cur>=4){ %>
+                                    <% queryObj.p = 1; %>
+                                    <li><a class="btn" href="/user/collections/<%= detail.uuid %>?<%= querystring.stringify(queryObj) %>">
+                                        <i class="lnr lnr-chevron-left"></i>
+                                    </a></li>
+                                <% } %>
+
+                                <% page.forEach( (p) => { %>
+                                    <% queryObj.p = p; %>
+                                    <li <%= (p==cur) ? ' class=cur' : '' %> ><a class="btn" href="/user/collections/<%= detail.uuid %>?<%= querystring.stringify(queryObj) %>"><%= p %></a></li>
+                                <% } ) %>
+                                <% queryObj.p = last; %>
+                                <li>...</li><li><a class="btn" href="/user/collections/<%= detail.uuid %>?<%= querystring.stringify(queryObj) %>"><%= last %></a></li>
+                                <form action="/user/collections/<%= detail.uuid %>?<%= querystring.stringify(queryObj) %>">
+                                    <% for( let key in queryObj ){ %>
+                                        <% if(key!='p'){ %>
+                                        <input type="hidden" name="<%= key %>" value="<%= queryObj[key] %>" />
+                                        <% } %>
+                                    <% } %>
+                                    <li><input type="text" name="p" placeholder="跳转至" /></li><li class="go"><input class="btn" type="submit" value="GO" /></li>
+                                </form>
+                            </ul>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+       
+        <%- include footer %>
+        
+    </body>
+</html>

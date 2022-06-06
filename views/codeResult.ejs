@@ -1,0 +1,36 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>代码 - CWEBGL 用户体验与设计的最前沿</title>
+    <style>
+        *{ margin:0; padding:0; }
+        #showfps{
+            position:absolute;color:#fff;right:110px;bottom:30px; width:80px; height:30px; line-height:30px; text-align:center; color:#fff; font-size:12px; font-family:'Arail','微软雅黑';
+        }
+    </style>
+</head>
+    <body>
+        <%- htmlCode || '' %>
+        
+        <% libs && libs.forEach( (lib) => { %>
+            <script src="<%= lib.url %>"></script>
+            <%- lib.initial && lib.initial %>
+        <% } ) %>
+        
+        <script>
+            function sendMsg(msg){
+                var msg = ((typeof(msg) == 'object') ? JSON.stringify(msg) : msg) || '';
+                window.parent.postMessage(msg,'*');
+            }
+            
+            try{
+                <%- jsCode || '' %>
+            }catch(e){
+                var er = `<b class="orange">${e.toString()}</b>`;
+                sendMsg(er);
+            }
+        </script>
+    </body>
+</html>

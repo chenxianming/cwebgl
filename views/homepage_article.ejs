@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<%- include head %>
+</head>
+    <body>
+        <%- include header %>
+        
+        <%- include user %>
+        
+        <div class="wrap">
+            <div class="homepage">
+                <div class="homepage-left w260">
+                    <div class="homepage-title">
+                        <i class="lnr lnr-user"></i><span>我的主页</span>
+                    </div>
+                    <%- include menu %>
+                </div>
+                <div class="fr w758">
+                    <div class="pd30" style="padding-top:0">
+                        <div class="homepage-c">
+                            <ul>
+                                <% let temp = Object.assign({},queryObj);temp.s = ''; %><li<%- (!queryObj.s) ? ' class=cur' : '' %>><a href="/user/article?<%= querystring.stringify(temp) %>">全部</a></li><% temp = Object.assign({},queryObj);temp.s = 'normal'; %><li<%- (queryObj.s=='normal') ? ' class=cur' :'' %>><a href="/user/article?<%= querystring.stringify(temp) %>">已发表</a></li><% temp = Object.assign({},queryObj);temp.s = 'pending'; %><li<%- (queryObj.s=='pending') ? ' class=cur' :'' %>><a href="/user/article?<%= querystring.stringify(temp) %>">正在审核<% if(data.pendingCount){ %><span class="orange">(<%= data.pendingCount %>)</span><% } %></a></li>
+                            </ul>
+                        </div>
+                        <div class="homepage-list">
+                            <% data.result.forEach( (data) => { %>
+                            <div class="homepage-list-article">
+                                <a href="/article/<%= data.uuid %>.html"><%- data.status=='pending' ? '<b style="margin-right:10px;" class=orange>正在审核</b>' : '' %><%= data.title %></a>
+                                <div class="display">
+                                    <div class="display-item"><i class="lnr lnr-eye"></i><span><%= data.views %></span></div><div class="display-item"><i class="lnr lnr-bubble"></i><span><%= data.comment %></span></div><div class="display-item"><i class="lnr lnr-history"></i><span><%= data.postDate %></span></div>
+                                </div>
+                                <div class="homepage-list-article-action">
+                                    <div class="homepage-list-article-action-edit btn">
+                                        <a href="/user/editpost?t=article&uuid=<%= data.uuid %>"><i class="lnr lnr-pencil"></i></a>
+                                    </div><div class="homepage-list-article-action-remove btn event-delete" data-type="article" data-uuid="<%= data.uuid %>">
+                                        <i class="lnr lnr-trash"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } ) %>
+                            <% if(!data.result.length){ %>
+                            <div class="homepage-list-display">暂无信息</div>
+                            <% } %>
+                        </div>
+                        
+                        <% 
+                            let page = [];
+                            let count = data.count;
+                            let last = Math.ceil( data.count / (data.limit || 12) );
+                            let cur = (data.offset);
+
+                            let range = [];
+
+                            if(cur>=3){
+                                range.push(cur-3);
+                                range.push( (cur+2 > last) ? last : (cur+2) );
+                            }else{
+                                range.push(0);
+                                range.push( (4 > last) ? last : (4) );
+                            }
+
+                            for(let i = range[0];i<range[1];i++){
+                                page.push(i+1);
+                            }
+
+                        %>
+
+                        <div id="page">
+                            <ul>
+                                <% if(cur>=4){ %>
+                                    <% queryObj.p = 1; %>
+                                    <li><a class="btn" href="/user/article?<%= querystring.stringify(queryObj) %>">
+                                        <i class="lnr lnr-chevron-left"></i>
+                                    </a></li>
+                                <% } %>
+
+                                <% page.forEach( (p) => { %>
+                                    <% queryObj.p = p; %>
+                                    <li <%= (p==cur) ? ' class=cur' : '' %> ><a class="btn" href="/user/article?<%= querystring.stringify(queryObj) %>"><%= p %></a></li>
+                                <% } ) %>
+                                <% queryObj.p = last; %>
+                                <li>...</li><li><a class="btn" href="/user/article?<%= querystring.stringify(queryObj) %>"><%= last %></a></li>
+                                <form action="/user/article?<%= querystring.stringify(queryObj) %>">
+                                    <% for( let key in queryObj ){ %>
+                                        <% if(key!='p'){ %>
+                                        <input type="hidden" name="<%= key %>" value="<%= queryObj[key] %>" />
+                                        <% } %>
+                                    <% } %>
+                                    <li><input type="text" name="p" placeholder="跳转至" /></li><li class="go"><input class="btn" type="submit" value="GO" /></li>
+                                </form>
+                            </ul>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+       
+        <%- include footer %>
+        
+    </body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<%- include head %>
+</head>
+    <body>
+        <%- include header %>
+        
+        <%- include user %>
+        
+        <div class="wrap">
+            <div class="homepage">
+                <div class="homepage-left w260">
+                    <div class="homepage-title">
+                        <i class="lnr lnr-user"></i><span>我的主页</span>
+                    </div>
+                    <%- include menu %>
+                </div>
+                <div class="fr w758">
+                    <div class="pd30" style="padding-top:0">
+                        <div class="homepage-c">
+                            <ul>
+                                
+                                <li<%- (!queryObj.t || queryObj.t=='article') ? ' class=cur' : '' %>><a href="/user/collections?t=article">文章</a></li>
+                                
+                                <li<%- (queryObj.t=='website') ? ' class=cur' : '' %>><a href="/user/collections?t=website">酷站</a></li>
+                                
+                                <li<%- (queryObj.t=='code') ? ' class=cur' : '' %>><a href="/user/collections?t=code">代码</a></li>
+                                
+                                <li<%- (queryObj.t=='topic') ? ' class=cur' : '' %>><a href="/user/collections?t=topic">热帖</a></li>
+                                
+                            </ul>
+                            <div class="homepage-send-btn btn new-collections">新增</div>
+                        </div>
+                        <div class="homepage-list">
+                            <% data.result.forEach( (d) => { %>
+                            <div class="homepage-list-collections">
+                               
+                                <div class="homepage-list-collections-img" style="background:url('<%= d.type=='topic' ? '/collection_community.png' : (d.litpic || '/collection_default.png') %>') no-repeat 0 0;<%= !d.litpic ? 'background-size:320px 220px;' : '' %>">
+                                    <div class="homepage-list-collections-img-album">
+                                        <div class="homepage-list-collections-img-album-info">
+                                            <a href="/user/collections/<%= d.uuid %>">
+                                                <h3><%= d.name %></h3>
+                                                <p><%= d.collectCount %></p>
+                                                <h4>数量</h4>
+                                            </a>
+                                        </div>
+                                        <div class="websitelist-item-img-active-collection btn event-delete" data-type="collections" data-uuid="<%= d.uuid %>">
+                                            <i class="lnr-trash lnr"></i><span>删除</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <% } ) %>
+                            <div class="clear"></div>
+                            <% if(!data.result.length){ %>
+                            <div class="homepage-list-display">暂无信息</div>
+                            <% } %>
+                        </div>
+                        
+                        <% 
+                            let page = [];
+                            let count = data.count;
+                            let last = Math.ceil( data.count / (data.limit || 4) );
+                            let cur = (data.offset);
+
+                            let range = [];
+
+                            if(cur>=3){
+                                range.push(cur-3);
+                                range.push( (cur+2 > last) ? last : (cur+2) );
+                            }else{
+                                range.push(0);
+                                range.push( (4 > last) ? last : (4) );
+                            }
+
+                            for(let i = range[0];i<range[1];i++){
+                                page.push(i+1);
+                            }
+
+                        %>
+
+                        <div id="page">
+                            <ul>
+                                <% if(cur>=4){ %>
+                                    <% queryObj.p = 1; %>
+                                    <li><a class="btn" href="/user/collections?<%= querystring.stringify(queryObj) %>">
+                                        <i class="lnr lnr-chevron-left"></i>
+                                    </a></li>
+                                <% } %>
+
+                                <% page.forEach( (p) => { %>
+                                    <% queryObj.p = p; %>
+                                    <li <%= (p==cur) ? ' class=cur' : '' %> ><a class="btn" href="/user/collections?<%= querystring.stringify(queryObj) %>"><%= p %></a></li>
+                                <% } ) %>
+                                <% queryObj.p = last; %>
+                                <li>...</li><li><a class="btn" href="/user/collections?<%= querystring.stringify(queryObj) %>"><%= last %></a></li>
+                                <form action="/user/collections?<%= querystring.stringify(queryObj) %>">
+                                    <% for( let key in queryObj ){ %>
+                                        <% if(key!='p'){ %>
+                                        <input type="hidden" name="<%= key %>" value="<%= queryObj[key] %>" />
+                                        <% } %>
+                                    <% } %>
+                                    <li><input type="text" name="p" placeholder="跳转至" /></li><li class="go"><input class="btn" type="submit" value="GO" /></li>
+                                </form>
+                            </ul>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+       
+        <%- include footer %>
+        
+    </body>
+</html>

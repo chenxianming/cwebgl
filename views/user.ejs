@@ -1,0 +1,111 @@
+        <% 
+            let level = 0;
+
+            (userData.credit >= 5) && ( level=1 );
+            (userData.credit >= 20) && ( level=2 );
+            (userData.credit >= 50) && ( level=3 );
+            (userData.credit >= 100) && ( level=4 );
+            (userData.credit >= 300) && ( level=5 );
+        %>
+        
+        <div class="wrap">
+            <div id="user-homepage">
+                <div class="fl">
+                    <div class="user-display-infomation">
+                        <div class="user-display-infomation-img">
+                            <a href="/user/<%= userData.uuid %>">
+                                <img src="<%= userData ? (userData.avatar ? userData.avatar : '/assets/img/user-avatar-default.png' ) : '/assets/img/user-avatar-default.png' %>" />
+                            </a>
+                        </div>
+                        <div class="user-display-infomation-name">
+                            <%= userData.name %>
+                        </div>
+                        <div class="user-display-infomation-level">
+                            <div class="user-infomation-level">
+                                <b><%= userData.credit %>积分</b><b>Levl:<%= level %></b>
+                                <%- (level >= 3) ? '<span>Pro</span>' : '' %>
+                            </div>
+                        </div>
+                        <div class="user-display-infomation-description">
+                            <%= userData.postScript || '该用户很懒,未留下任何介绍' %>
+                        </div>
+                        <div class="user-display-infomation-location">
+                            <i class="lnr lnr-location"></i><span><%= userData.location || '未知' %></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="user-homepage fr">
+                    <% let userKey = [
+                        [
+                            {
+                                name:'性别',
+                                key:'male'
+                            },
+                            {
+                                name:'年龄',
+                                key:'age'
+                            },
+                            {
+                                name:'职业',
+                                key:'job'
+                            },
+                        ],
+                        [
+                            {
+                                name:'公司',
+                                key:'company'
+                            },
+                            {
+                                name:'邮箱',
+                                key:'email'
+                            },
+                            {
+                                name:'QQ',
+                                key:'qq'
+                            },
+                        ],
+                        [
+                            {
+                                name:'Github',
+                                key:'github'
+                            },
+                            {
+                                name:'微博',
+                                key:'weibo'
+                            },
+                            {
+                                name:'微信',
+                                key:'wechat'
+                            },
+                        ],
+                        [
+                            {
+                                name:'个人主页',
+                                key:'link'
+                            },
+                            {
+                                name:'Behance',
+                                key:'be'
+                            },
+                        ],
+                    ]; %>
+                    
+                    <% userKey.forEach( (userArr) => { %>
+                    <div class="user-homepage-diaplay-item-list fl">
+                        <% userArr.forEach( (user) => { %>
+                        <div class="user-homepage-diaplay-item">
+                            <h2><%= user.name %></h2>
+                            <p><%= userData[ user.key ] || '未填写' %></p>
+                        </div>
+                        <% } ) %>
+                    </div>
+                    <% } ) %>
+                   
+                    <a href="/user/update" class="update-profile btn">修改资料</a>
+                   
+                    <div class="clear"></div>
+                </div>
+                <div class="clear"></div>
+
+            </div>
+        </div>

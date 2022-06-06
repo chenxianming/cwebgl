@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<%- include head %>
+</head>
+    <body>
+        <%- include header %>
+        <link rel="stylesheet" href="/assets/img/codemirror.css">
+        <link rel="stylesheet" href="/assets/img/lucario.css">
+        <style>
+            .CodeMirror{ height:100%; }
+        </style>
+        <div class="article">
+            <div class="table">
+                <div class="cell">
+                    <div class="wrap">
+                        <% 
+                            let desc = '';
+                        
+                            switch( data.categories ){
+                                case '原创文章' :
+                                    {
+                                        desc = 'CWEBGL作者原创内容,欢迎大家投稿交流';
+                                    }
+                                    break ;
+                                    
+                                case 'WEBGL资讯' :
+                                    {
+                                        desc = '关于WEBGL的新鲜咨询';
+                                    }
+                                    break ;
+                                    
+                                case '翻译文章' :
+                                    {
+                                        desc = '原创转载国外翻译内容';
+                                    }
+                                    break ;
+                                    
+                                case 'WEBGL教程' :
+                                    {
+                                        desc = '收录国内外原创转载教程，让您学应用WebGL制作各类场景';
+                                    }
+                                    break ;
+                                    
+
+                            }
+                        %>
+                        <h2><%= data.categories %></h2>
+                        <p><%= desc %></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="article">
+            <div class="wrap">
+                <div class="fl">
+                    <div class="w690">
+                        <div class="article-content">
+                            <div class="article-content-title">
+                                <div class="fl">
+                                    <%= data.title %>
+                                </div>
+                                <div class="fr">
+                                    <div class="table">
+                                        <div class="cell">
+                                            <div class="forum-content-title-coll btn collect-event<%= isCollect ? ' isCollected' : '' %>" data-uuid="<%= data.uuid %>" data-type="article">
+                                                <i class="lnr lnr-star<%= isCollect ? '-empty' : '' %>"></i><span><%= isCollect ? '已收藏' : '收藏' %></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                            <div class="article-content-desc">
+                               
+                                <div class="article-content-desc-item">
+                                    <% if( data.anonymous==1 ){ %>
+                                    <div class="user-infomation">
+                                        <div class="user-infomation-avatar">
+                                            <a href="#article"><img src="/assets/img/avatar_default.png" /></a>
+                                        </div>
+                                        <div class="user-infomation-desc">
+                                            <div class="user-infomation-name">匿名用户</div>
+                                        </div>
+                                    </div>
+                                    <% }else{ %>
+                                    
+                                    <% 
+                                        let level = 0;
+                                        
+                                        (author.credit >= 5) && ( level=1 );
+                                        (author.credit >= 20) && ( level=2 );
+                                        (author.credit >= 50) && ( level=3 );
+                                        (author.credit >= 100) && ( level=4 );
+                                        (author.credit >= 300) && ( level=5 );
+                                    %>
+                                    
+                                    <div class="user-infomation">
+                                        <div class="user-infomation-avatar">
+                                            <a href="/user/<%= author.uuid %>"><img src="<%= author.avatar || '/assets/img/user-avatar-default.png' %>" /></a>
+                                        </div>
+                                        <div class="user-infomation-desc">
+                                            <div class="user-infomation-name"><%= author.name %></div>
+                                            <div class="user-infomation-level">
+                                                Levl:<%= level %>
+                                                <%- (level >= 3) ? '<span>Pro</span>' : '' %>
+                                            </div>
+                                        </div>
+                                        <!--
+                                        <div class="article-content-desc-item-tips">
+                                            <p>
+                                                tips:所有用户可通过积分提升等级<br />
+                                                <span>levl1</span> 为5积分<br />
+                                                <span>levl2</span> 为20积分<br />
+                                                <span>levl3</span> 为50积分<br />
+                                                <span>levl4</span> 为100积分<br />
+                                                <span>levl5</span> 为300积分<br />
+                                                超过 <span>levl3</span> 即可升级为专业用户<br />
+                                            </p>
+                                            <a href="#">
+                                                <i class="lnr lnr-link"></i><em>CWEBGL积分获得法则</em>
+                                            </a>
+                                        </div>
+                                        -->
+                                    </div>
+                                    
+                                    <% } %>
+                                    
+                                </div>
+                                
+                                <div class="article-content-desc-item">时间:<%= data.postDate %></div>
+                                <div class="article-content-desc-item">浏览量:<%= data.views %></div>
+                                <div class="article-content-desc-item"><span class="orange"><%= data.categories %></span></div>
+                                <div class="article-content-desc-item">来源:<%- data.from ? `<a${ (data.fromLink ? ' target=_blank' : '') } href=${ data.fromLink || '#' }>${ data.from }</a>` : '<a href=/>CWEBGL原创</a>' %></div>
+                            </div>
+
+                            <% if(data.pick && pick){ %>
+                            <div class="article-content-guide">
+                                <div class="pd20">
+                                    <div class="article-content-guide-ct">
+                                        <p><%= pick.pick.description %></p>
+                                    </div>
+                                    <div class="article-content-guide-title">
+                                        专栏目录
+                                    </div>
+                                    <div class="article-content-guide-list">
+                                        <ul>
+                                            <% pick.articles.forEach( (pk) => { %>
+                                            <li><%- (pk.uuid==data.uuid) ? pk.title : `<a href=/article/${pk.uuid}.html>${pk.title}</a>` %></li>
+                                            <% } ) %>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } %>
+
+                            <div class="article-content-main display-content">
+                                <%- data.content %>
+                            </div>
+                            <div class="article-content-tags">
+                                <ul>
+                                    <% data.tags.forEach( (tag) => { %>
+                                    <li><a href="/search?k=<%= tag %>"><%= tag %></a></li>
+                                    <% } ) %>
+                                </ul>
+                            </div>
+                            <div class="article-content-copy">
+                                内容版权归作者所有,转载请注明出处 <a href="http://www.cwebgl.com/article/<%= data.uuid %>.html">http://www.cwebgl.com/article/<%= data.uuid %>.html</a>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="fr">
+                    <div class="w310">
+                        <% if(latestPick){ %>
+                        <div class="sub-display">
+                            <div class="sub-display-title"><h3>最新专栏</h3></div>
+                            <div class="sub-display-content">
+                                <% let url = latestPick.articles[0] ? `/article/${ latestPick.articles[0].uuid }.html` : '#article'; %>
+                                <div class="sub-display-content-spec">
+                                    <div class="sub-display-content-spec-img">
+                                        <a href="<%= url %>"><img src="<%= latestPick.litpic %>" /></a>
+                                    </div>
+                                    <div class="sub-display-content-spec-title">
+                                        <a href="<%= url %>"><%= latestPick.title %></a>
+                                    </div>
+                                    <div class="sub-display-content-spec-desc">
+                                        <%- latestPick.description %>
+                                    </div>
+                                    <div class="sub-display-content-spec-list">
+                                        <ul>
+                                            <% for(let i = 0;i<4;i++){ 
+                                                if(!latestPick.articles[i]){ break ; }
+                                            %>
+                                            <li><a href="/article/<%= latestPick.articles[i].uuid %>.html"><%= latestPick.articles[i].title %></a></li>
+                                            <% } %>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <% } %>
+                        
+                        <div class="sub-display">
+                            <div class="sub-display-title" style="margin-bottom:0"><h3>热门文章</h3></div>
+                            <div class="sub-display-content">
+                                <div class="sub-display-content-spec">
+                                    <div class="sub-display-content-spec-list">
+                                        <ul>
+                                            <% hotList.result && hotList.result.forEach( (hot) => { %>
+                                            <li><a href="/article/<%= hot.uuid %>.html"><%= hot.title %></a></li>
+                                            <% } ) %>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="sub-display">
+                            <div class="sub-display-title"><h3>相关推荐</h3></div>
+                            <div class="sub-display-content">
+                                <% relation.forEach( (rs) => { %>
+                                <div class="sub-display-content-rec">
+                                    <div class="sub-display-content-rec-item">
+                                        <a href="/article/<%= rs.uuid %>.html"><img src="<%= rs.litpic %>" /></a>
+                                        <h2><a href="/article/<%= rs.uuid %>.html"><%= rs.title %></a></h2>
+                                    </div>
+                                </div>
+                                <% } ) %>
+                            </div>
+                        </div>
+                        
+
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+        
+        <div id="comments" data-page="1" data-type="article">
+            <div class="wrap">
+                
+                <div class="list-more load-comment btn">
+                    <i class="lnr lnr-redo"></i><span>加载更多评论</span>
+                </div>
+            </div>
+        </div>
+        
+        <div id="comment-reply" data-type="comments" data-target="<%= data.uuid %>">
+            <div class="wrap">
+                <div class="fl">
+                    <div class="comment-reply-user login-event">
+                        <a href="#comments"><img src="<%= userData ? (userData.avatar ? userData.avatar : '/assets/img/avatar_default.png' ) : '/assets/img/avatar_default.png' %>" /></a>
+                        <h3><%= userData ? userData.name : '游客' %></h3>
+                    </div>
+                </div>
+                <div class="fr">
+                    <div class="comment-reply-post post" data-usage="face,link,image" data-type="article" data-event="reply">
+                        <div class="post-title">
+                        </div>
+                        <div class="post-content">
+                            <div class="pd20">
+                                <div class="post-content-textarea" contenteditable="true"></div>
+                            </div>
+                        </div>
+                        <% if(!userData){ %>
+                        <div class="comment-reply-post-nologin">
+                            <span style="color:rgba(0,0,0,.4)">请先<b class="login-event orange btn" style="margin:0 5px;">登录</b>后再发表评论</span>
+                        </div>
+                        <% } %>
+                    </div>
+                </div>
+                <div class="clear"></div>
+                <div class="fr">
+                    <div class="post-content-submit btn">发表评论</div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+        
+        <% prevNext.forEach( (e) => { %>
+            <% if(e.idx=='next'){ %>
+            <div id="next" class="btn"><a href="/article/<%= e.uuid %>.html"><i class="lnr lnr-chevron-right"></i></a></div>
+            <% }else{ %>
+            <div id="prev" class="btn"><a href="/article/<%= e.uuid %>.html"><i class="lnr lnr-chevron-left"></i></a></div>
+            <% } %>
+        <% } ) %>
+        
+        <script src="/js/codemirror.js"></script>
+        <script src="/js/editor/javascript.js"></script>
+        <%- include footer %>
+        
+    </body>
+</html>

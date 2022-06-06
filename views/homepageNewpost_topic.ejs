@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<%- include head %>
+</head>
+    <body>
+        <%- include header %>
+        
+        <%- include user %>
+        
+        <div class="wrap">
+            <div class="homepage">
+                <div class="homepage-left w260">
+                    <div class="homepage-title">
+                        <i class="lnr lnr-user"></i><span>我的主页</span>
+                    </div>
+                    <%- include menu %>
+                </div>
+                <div class="content-edit fr w758 content-post" data-type="newTopic" data-target="newTopic">
+                    <h2 class="homepage-container-title">发表帖子</h2>
+                    <div class="homepage-container" style="margin-bottom:20px">
+                        <div class="homepage-container-line">
+                            <div class="pd20">
+                                <div class="homepage-container-line-title">标题<span class="orange">*</span></div>
+                                <div class="homepage-input edit-field-article-title">
+                                    <input data-value="title" type="text" placeholder="标题" />
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="homepage-container-line">
+                            <div class="pd20">
+                                <div class="homepage-container-line-title">栏目分类</div>
+                                <div class="homepage-container-line-selector" data-value="type">
+                                    <ul>
+                                        <li><i class="btn homepage-container-sl"><b></b></i><span>讨论</span></li>
+                                        <li><i class="btn homepage-container-sl"><b></b></i><span>求助</span></li>
+                                        <li><i class="btn homepage-container-sl"><b></b></i><span>教程</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="homepage-container-line">
+                            <div style="width:710px;border:none;margin-bottom:0" class="comment-reply-post post" data-usage="face,link,image,code,cloud,bold,list,audio,video,attachment,paragraph" data-type="topic" data-event="reply">
+                                <div class="post-title">
+                                </div>
+                                <div class="post-content">
+                                    <div class="pd20">
+                                        <div data-value="content" class="post-content-textarea" contenteditable="true"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="homepage-container-line">
+                            <div class="pd20">
+                                <div class="homepage-container-line-title">标签</div>
+                                <div class="homepage-container-line-p">对该内容添加标签，便于关键词搜索</div>
+                                <div>
+                                    <div class="tags" data-value="anonymous">
+                                        <ul></ul>
+                                    </div>
+                                    <div style="margin-right:10px;" class="homepage-input edit-field-article-form">
+                                        <input class="tag-input" type="text" placeholder="关键字" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="fr">
+                        <div class="post-content-submit btn">发帖</div>
+                    </div>
+                    <div class="clear"></div>
+                    
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+        
+        <script>
+            (window.global) || (window.global = {});
+            global['relationUUID'] = '<%- relationUUID %>';
+            global['relationUUID'] = global['relationUUID'].replace(/fanxiegang/g,'\\');
+        </script>
+        <%- include footer %>
+        
+    </body>
+</html>

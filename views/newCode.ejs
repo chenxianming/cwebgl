@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include head %>
+</head>
+    <body>
+        <%- include header %>
+        <link rel="stylesheet" href="/assets/img/codemirror.css">
+        <link rel="stylesheet" href="/assets/img/dialog.css">
+        <link rel="stylesheet" href="/assets/img/matchesonscrollbar.css">
+        <link rel="stylesheet" href="/assets/img/lucario.css">
+        <style>
+            html,body{ width:100%; height:100%; overflow:hidden; }
+            .CodeMirror{ height:100%; }
+        </style>
+        <div id="code">
+            <div class="code-panel">
+                <div class="wrap">
+                    <div class="fl">
+                        <div class="code-panel-title">新的webgl代码</div>
+                    </div>
+                    
+                    <div class="fr">
+                        <div class="table">
+                            <div class="cell">
+                                <div class="code-setup btn">
+                                    <div class="table">
+                                        <div class="cell">
+                                            <i class="lnr lnr-cog"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="clear"></div>
+                </div>
+            </div>
+            <div class="code-area">
+                <div class="code-area-edit">
+                    <div class="code-area-edit-html">
+                        <div class="code-area-edit-html-container">
+                            <textarea style="display:none" id=code-area-edit-html-editor><%- htmlCode || '' %></textarea>
+                        </div>
+                        <div class="code-area-edit-html-grab">
+                            <div class="code-area-edit-html-title">HTML代码</div>
+                        </div>
+                        <div class="code-refresh btn">
+                            <i class="lnr lnr-redo"></i>
+                        </div>
+                    </div><div class="code-area-edit-js">
+                        <div class="code-area-edit-js-container">
+                            <textarea style="display:none" id=code-area-edit-js-editor><%- jsCode || '' %></textarea>
+                        </div>
+                        <div class="code-area-edit-js-grab">
+                            <div class="code-area-edit-js-title">JS代码</div>
+                        </div>
+                        <div class="code-refresh btn">
+                            <i class="lnr lnr-redo"></i>
+                        </div>
+                    </div>
+                    <div class="code-area-edit-grab"></div>
+                </div>
+                <div class="code-area-display">
+                    <iframe scrolling="no" src="/code/preview" width="100%" height="100%" frameborder="0"></iframe>
+                    <div class="console btn">Console</div>
+                    <div class="after"></div>
+                </div>
+            </div>
+        </div>
+           
+        <div id="code-setup" class="code-alert">
+            <div class="code-alert-close btn">
+                <i class="lnr lnr-cross"></i>
+            </div>
+            <div class="table">
+                <div class="cell" style="padding:30px 0;">
+                    <div class="code-setup-bg"></div>
+                    <div class="code-setup-container">
+                        <div class="pd30">
+                            <div class="code-setup-container-title">
+                                <input type="text" placeholder="标题" />
+                            </div>
+                            <div class="code-setup-container-description">
+                                <textarea placeholder="描述"></textarea>
+                            </div>
+                            <div class="code-setup-container-dependencies">
+                                <div class="code-setup-container-dependencies-title">依赖文件</div>
+                                <ul data-default="<%= lib.join(',') %>"></ul>
+                            </div>
+                            <div class="fr">
+                                <div class="code-setup-container-dependencies-new btn">
+                                    <i class="lnr lnr-plus-circle"></i><span>添加</span>
+                                </div>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="code-setup-action">
+                            <div class="code-setup-action-btn save-code btn">保存</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+           
+        <script src="/js/codemirror.js"></script>
+        <script src="/js/editor/xml.js"></script>
+        <script src="/js/editor/javascript.js"></script>
+        <script src="/js/editor/dialog.js"></script>
+        <script src="/js/editor/searchcursor.js"></script>
+        <script src="/js/editor/search.js"></script>
+        <script src="/js/editor/annotatescrollbar.js"></script>
+        <script src="/js/editor/matchesonscrollbar.js"></script>
+        <script src="/js/editor/jump-to-line.js"></script>
+        <script>
+            var htmlContainer = document.getElementById('code-area-edit-html-editor'),
+                jsContainer = document.getElementById('code-area-edit-js-editor');
+                
+            var htmlEditor = CodeMirror.fromTextArea(htmlContainer, {
+                lineNumbers: true,
+                theme:'lucario',
+                mode:"text/html",
+                extraKeys: {"Alt-F": "findPersistent"}
+            }),jsEditor = CodeMirror.fromTextArea(jsContainer, {
+                lineNumbers: true,
+                theme:'lucario',
+                mode:"javascript",
+                extraKeys: {"Alt-F": "findPersistent"}
+            });
+            
+            (window.global) || (window.global = {});
+            
+            global.htmlEditor = htmlEditor;
+            global.jsEditor = jsEditor;
+            
+        </script>
+        <%- include footer %>
+    </body>
+</html>

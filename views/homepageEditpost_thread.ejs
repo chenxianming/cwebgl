@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<%- include head %>
+</head>
+    <body>
+        <%- include header %>
+        
+        <%- include user %>
+        
+        <div class="wrap">
+            <div class="homepage">
+                <div class="homepage-left w260">
+                    <div class="homepage-title">
+                        <i class="lnr lnr-user"></i><span>我的主页</span>
+                    </div>
+                    <%- include menu %>
+                </div>
+                <div class="content-edit fr w758 content-post" data-type="editThread" data-target="editThread" data-uuid="<%= data.uuid %>">
+                    <h2 class="homepage-container-title">编辑帖子</h2>
+                    <div class="homepage-container" style="margin-bottom:20px">
+                       
+                        <div class="homepage-container-line">
+                            <div style="width:710px;border:none;margin-bottom:0" class="comment-reply-post post" data-usage="face,link,image,code,cloud<%= (data.index==0) ? ',bold,list,audio,video,attachment,paragraph':'' %>" data-type="topic" data-event="reply">
+                                <div class="post-title">
+                                </div>
+                                <div class="post-content">
+                                    <div class="pd20">
+                                        <div data-value="content" class="post-content-textarea" contenteditable="true"><%- data.content %></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="fr">
+                        <div class="post-content-submit btn">编辑</div>
+                    </div>
+                    <div class="clear"></div>
+                    
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+        
+        <script>
+            (window.global) || (window.global = {});
+            global['relationUUID'] = '<%- relationUUID %>';
+            global['relationUUID'] = global['relationUUID'].replace(/fanxiegang/g,'\\');
+        </script>
+        <%- include footer %>
+        
+    </body>
+</html>

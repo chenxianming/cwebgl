@@ -1,0 +1,10 @@
+                    <div class="homepage-menu">
+                        <ul>
+                            <li<%= ( (typeof(menu) != 'undefined' ) && (menu=='message') ) ? ' class=current' : '' %>><a href="/user/message">消息中心<%- userData.newMessage ? `<span class=orange>(${userData.newMessage})</span>` : '' %></a></li>
+                            <li<%= ( (typeof(menu) != 'undefined' ) && (menu=='collections') ) ? ' class=current' : '' %>><a href="/user/collections">我的收藏</a></li>
+                            <li<%= ( (typeof(menu) != 'undefined' ) && (menu=='article') ) ? ' class=current' : '' %>><a href="/user/article">文章</a></li>
+                            <li<%= ( (typeof(menu) != 'undefined' ) && (menu=='website') ) ? ' class=current' : '' %>><a href="/user/website">酷站</a></li>
+                            <li<%= ( (typeof(menu) != 'undefined' ) && (menu=='code') ) ? ' class=current' : '' %>><a href="/user/code">代码</a></li>
+                            <li<%= ( (typeof(menu) != 'undefined' ) && (menu=='topic') ) ? ' class=current' : '' %>><a href="/user/topic">热帖</a></li>
+                        </ul>
+                    </div>

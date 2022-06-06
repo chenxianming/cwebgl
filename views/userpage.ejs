@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<%- include head %>
+</head>
+    <body>
+        <%- include header %>
+
+        
+        <% 
+            let level = 0;
+
+            (data.credit >= 5) && ( level=1 );
+            (data.credit >= 20) && ( level=2 );
+            (data.credit >= 50) && ( level=3 );
+            (data.credit >= 100) && ( level=4 );
+            (data.credit >= 300) && ( level=5 );
+        %>
+        
+        <div class="wrap">
+            <div id="user-homepage">
+                <div class="fl">
+                    <div class="user-display-infomation">
+                        <div class="user-display-infomation-img">
+                            <a href="/user/<%= data.uuid %>">
+                                <img src="<%= data ? (data.avatar ? data.avatar : '/assets/img/user-avatar-default.png' ) : '/assets/img/user-avatar-default.png' %>" />
+                            </a>
+                        </div>
+                        <div class="user-display-infomation-name">
+                            <%= data.name %>
+                        </div>
+                        <div class="user-display-infomation-level">
+                            <div class="user-infomation-level">
+                                <b><%= data.credit %>积分</b><b>Levl:<%= level %></b>
+                                <%- (level >= 3) ? '<span>Pro</span>' : '' %>
+                            </div>
+                        </div>
+                        <div class="user-display-infomation-description">
+                            <%= data.postScript || '该用户很懒,未留下任何介绍' %>
+                        </div>
+                        <div class="user-display-infomation-location">
+                            <i class="lnr lnr-location"></i><span><%= data.location || '未知' %></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="user-homepage fr">
+                    <% let userKey = [
+                        [
+                            {
+                                name:'性别',
+                                key:'male'
+                            },
+                            {
+                                name:'年龄',
+                                key:'age'
+                            },
+                            {
+                                name:'职业',
+                                key:'job'
+                            },
+                        ],
+                        [
+                            {
+                                name:'公司',
+                                key:'company'
+                            },
+                            {
+                                name:'邮箱',
+                                key:'email'
+                            },
+                            {
+                                name:'QQ',
+                                key:'qq'
+                            },
+                        ],
+                        [
+                            {
+                                name:'Github',
+                                key:'github'
+                            },
+                            {
+                                name:'微博',
+                                key:'weibo'
+                            },
+                            {
+                                name:'微信',
+                                key:'wechat'
+                            },
+                        ],
+                        [
+                            {
+                                name:'个人主页',
+                                key:'link'
+                            },
+                            {
+                                name:'Behance',
+                                key:'be'
+                            },
+                        ],
+                    ]; %>
+                    
+                    <% userKey.forEach( (userArr) => { %>
+                    <div class="user-homepage-diaplay-item-list fl">
+                        <% userArr.forEach( (user) => { %>
+                        <div class="user-homepage-diaplay-item">
+                            <h2><%= user.name %></h2>
+                            <p><%= data[ user.key ] || '未填写' %></p>
+                        </div>
+                        <% } ) %>
+                    </div>
+                    <% } ) %>
+                   
+                    <a href="/user/message/send?to=<%= data.name %>" class="update-profile btn send-to">发送消息</a>
+                   
+                    <div class="clear"></div>
+                </div>
+                <div class="clear"></div>
+
+            </div>
+        </div>
+        
+       
+        <div class="wrap">
+            <div class="homepage">
+                <div class="homepage-left w260">
+                    <div class="homepage-title">
+                        <i class="lnr lnr-user"></i><span><%= data.name %>的主页</span>
+                    </div>
+                    <div class="homepage-menu">
+                        <ul>
+                            <% let temp = {}; %>
+                            
+                            <% temp = Object.assign({},queryObj); temp.t = 'article',temp.p=1; %>
+                            <li<%- menu=='article' ? ' class=current' : '' %>><a href="/user/<%= data.uuid %>/?<%= querystring.stringify(temp) %>">TA的文章</a></li>
+                            <% temp = Object.assign({},queryObj); temp.t = 'website',temp.p=1; %>
+                            <li<%- menu=='website' ? ' class=current' : '' %>><a href="/user/<%= data.uuid %>/?<%= querystring.stringify(temp) %>">TA的酷站</a></li>
+                            <% temp = Object.assign({},queryObj); temp.t = 'code',temp.p=1; %>
+                            <li<%- menu=='code' ? ' class=current' : '' %>><a href="/user/<%= data.uuid %>/?<%= querystring.stringify(temp) %>">TA的代码</a></li>
+                            <% temp = Object.assign({},queryObj); temp.t = 'topic',temp.p=1; %>
+                            <li<%- menu=='topic' ? ' class=current' : '' %>><a href="/user/<%= data.uuid %>/?<%= querystring.stringify(temp) %>">TA的热帖</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="fr w758">
+                   
+                    <div class="pd30" style="padding-top:0">
+                       
+                        <div class="homepage-list">
+
+                        <div class="homepage-c">
+                            <ul>
+                                <li class="cur"><a href="/user/<%= data.uuid %>/?t=<%= menu %>">全部</a></li>
+                            </ul>
+                        </div>
+                           
+                            <% if(menu=='article'){ %>
+                            
+                            <% lists.result.forEach( (dt) => { %>
+                        
+                            <div class="homepage-list-article">
+                                <a href="/article/<%= dt.uuid %>.html"><%= dt.title %></a>
+                                <div class="display">
+                                    <div class="display-item"><i class="lnr lnr-eye"></i><span><%= dt.views %></span></div><div class="display-item"><i class="lnr lnr-bubble"></i><span><%= dt.comment %></span></div><div class="display-item"><i class="lnr lnr-history"></i><span><%= dt.postDate %></span></div>
+                                </div>
+                            </div>
+                            <% } ); %>
+                            
+                            <% } %>
+                            
+                            
+                            <div>
+                            <% if(menu=='website'){ %>
+
+                            <% lists.result.forEach( (dt) => { %>
+                            <div class="homepage-list-website">
+                                <div class="websitelist-item" data-item="<%= dt.uuid %>">
+                                    <div class="websitelist-item-img">
+                                        <img src="<%= data.litpic || '/website_default.png' %>" />
+                                        <div class="websitelist-item-img-active">
+                                            <div class="websitelist-item-img-active-link btn">
+                                                <a class="website-view" data-uuid="<%= dt.uuid %>" title="直接访问" target="_blank" href="http://<%= dt.link %>"><i class="lnr-link lnr"></i></a>
+                                            </div>
+                                            <div class="view-detail btn">
+                                                <a href="/website/<%= dt.uuid %>.html" title="查看该网站">
+                                                    <i class="lnr-select lnr"></i><span>查看该网站</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } ); %>
+                            
+                            <% } %>
+                            </div>
+                            
+                            
+                            <div>
+                            <% if(menu=='code'){ %>
+                            <% lists.result.forEach( (dt) => { %>
+                            <div class="homepage-list-website">
+                                <div class="websitelist-item" data-item="<%= dt.uuid %>">
+                                    <div class="websitelist-item-img">
+                                        <img src="<%= dt.litpic || '/code_default.png' %>" />
+                                        
+                                        <div class="websitelist-item-img-active">
+                                            <div class="view-detail btn">
+                                                <a href="/code/<%= dt.uuid %>" title="查看代码">
+                                                    <i class="lnr-select lnr"></i><span>查看该代码</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } ) %>
+                            <% } %>
+                            </div>
+                            
+                            
+                            <% if(menu=='topic'){ %>
+                            
+                            <% lists.result.forEach( (dt) => { %>
+                            <div class="homepage-list-article">
+                                <a href="/community/<%= dt.uuid %>.html"><%- dt.status=='pending' ? '<b style="margin-right:10px;" class=orange>正在审核</b>' : '' %><%= dt.title %></a>
+                                <div class="display">
+                                    <div class="display-item"><i class="lnr lnr-eye"></i><span><%= dt.views %></span></div><div class="display-item"><i class="lnr lnr-bubble"></i><span><%= (dt.threadCount-1) %></span></div><div class="display-item"><i class="lnr lnr-history"></i><span>最后回复：<%= dt.sortDate %></span></div>
+                                </div>
+                            </div>
+                            
+                            <% } ); %>
+                            <% } %>
+                            
+                            <% if(!lists.result.length){ %>
+                            <div class="homepage-list-display">暂无信息</div>
+                            <% } %>
+                        </div>
+                        
+                        
+                        <% 
+                            let page = [];
+                            let count = lists.count;
+                            let last = Math.ceil( lists.count / (lists.limit || 12) );
+                            let cur = (lists.offset);
+
+                            let range = [];
+
+                            if(cur>=3){
+                                range.push(cur-3);
+                                range.push( (cur+2 > last) ? last : (cur+2) );
+                            }else{
+                                range.push(0);
+                                range.push( (4 > last) ? last : (4) );
+                            }
+
+                            for(let i = range[0];i<range[1];i++){
+                                page.push(i+1);
+                            }
+
+                        %>
+
+                       
+                        <div id="page">
+                            <ul>
+                                <% if(cur>=4){ %>
+                                    <% queryObj.p = 1; %>
+                                    <li><a class="btn" href="/user/<%= data.uuid %>/?<%= querystring.stringify(queryObj) %>">
+                                        <i class="lnr lnr-chevron-left"></i>
+                                    </a></li>
+                                <% } %>
+
+                                <% page.forEach( (p) => { %>
+                                    <% queryObj.p = p; %>
+                                    <li <%= (p==cur) ? ' class=cur' : '' %> ><a class="btn" href="/user/<%= data.uuid %>/?<%= querystring.stringify(queryObj) %>"><%= p %></a></li>
+                                <% } ) %>
+                                <% queryObj.p = last; %>
+                                <li>...</li><li><a class="btn" href="/user/<%= data.uuid %>/?<%= querystring.stringify(queryObj) %>"><%= last %></a></li>
+                                <form action="/user/<%= data.uuid %>/?<%= querystring.stringify(queryObj) %>">
+                                    <% for( let key in queryObj ){ %>
+                                        <% if(key!='p'){ %>
+                                        <input type="hidden" name="<%= key %>" value="<%= queryObj[key] %>" />
+                                        <% } %>
+                                    <% } %>
+                                    <li><input type="text" name="p" placeholder="跳转至" /></li><li class="go"><input class="btn" type="submit" value="GO" /></li>
+                                </form>
+                            </ul>
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+       
+
+        <%- include footer %>
+        
+    </body>
+</html>

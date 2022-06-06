@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<%- include head %>
+</head>
+    <body>
+        <%- include header %>
+
+        <div class="article">
+            <div class="table">
+                <div class="cell">
+                    <div class="wrap">
+                        <h2>专栏</h2>
+                        <p>专栏整理收录了一系列文章供方便阅读</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="article">
+            <div class="wrap">
+                <div class="article-pick-wrap">
+                    <% data.result && data.result.forEach( (rs) => { %>
+                    <% let url = rs.articles[0] ? `/article/${ rs.articles[0].uuid }.html` : '#article'; %>
+                    <div class="article-pick">
+                        <div class="article-pick-img">
+                            <a href="<%= url %>"><img src="<%= rs.litpic %>" /></a>
+                        </div>
+                        
+                        <div class="article-pick-title"><a href="<%= url %>"><%= rs.title %></a></div>
+                        <div class="article-pick-infomation">
+                            <div class="fl">
+                                <div class="article-pick-infomation-i">
+                                    <i class="lnr lnr-book"></i><span><%= rs.articles.length %></span>
+                                </div>
+                                <div class="article-pick-infomation-i">
+                                    <i class="lnr lnr-history"></i><span><%= rs.updateDate %></span>
+                                </div>
+                            </div>
+                            <div class="fr">
+                                <a href="/pick?c=<%= rs.categories %>"><%= rs.categories %></a>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="article-pick-description">
+                            <%- rs.description %>
+                        </div>
+                        <div class="article-pick-list">
+                            <ul>
+                                
+                                <% for(let i = 0;i<4;i++){ 
+                                    if(!rs.articles[i]){ break ; }
+                                %>
+                                <li><a href="/article/<%= rs.articles[i].uuid %>.html"><%= rs.articles[i].title %></a></li>
+                                <% } %>
+                            </ul>
+                        </div>
+                        <div class="article-pick-more">
+                            <div class="fr">
+                                <a class="orange" href="<%= url %>">查看更多</a>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                    <% } ) %>
+                    
+                    <div class="clear"></div>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+        
+        
+        <% 
+            let page = [];
+            let count = data.count;
+            let last = Math.ceil( data.count / 12 );
+            let cur = (data.offset);
+
+            let range = [];
+
+            if(cur>=3){
+                range.push(cur-3);
+                range.push( (cur+2 > last) ? last : (cur+2) );
+            }else{
+                range.push(0);
+                range.push( (4 > last) ? last : (4) );
+            }
+
+            for(let i = range[0];i<range[1];i++){
+                page.push(i+1);
+            }
+
+        %>
+                
+        <div class="wrap">
+            <% if(cur > 1){ %>
+            <% queryObj.p = cur-1; %>
+            <div id="prev" class="btn"><a href="/pick?<%= querystring.stringify(queryObj) %>"><i class="lnr lnr-chevron-left"></i></a></div>
+            <% } %>
+
+            <% if(cur < last){ %>
+            <% queryObj.p = cur+1; %>
+            <div id="next" class="btn"><a href="/pick?<%= querystring.stringify(queryObj) %>"><i class="lnr lnr-chevron-right"></i></a></div>
+            <% } %>
+
+            <div id="page">
+                <ul>
+                    <% if(cur>=4){ %>
+                        <% queryObj.p = 1; %>
+                        <li><a class="btn" href="/pick?<%= querystring.stringify(queryObj) %>">
+                            <i class="lnr lnr-chevron-left"></i>
+                        </a></li>
+                    <% } %>
+
+                    <% page.forEach( (p) => { %>
+                        <% queryObj.p = p; %>
+                        <li <%= (p==cur) ? ' class=cur' : '' %> ><a class="btn" href="/pick?<%= querystring.stringify(queryObj) %>"><%= p %></a></li>
+                    <% } ) %>
+                    <% queryObj.p = last; %>
+                    <li>...</li><li><a class="btn" href="/pick?<%= querystring.stringify(queryObj) %>"><%= last %></a></li>
+                    <form action="/pick?<%= querystring.stringify(queryObj) %>">
+                        <% for( let key in queryObj ){ %>
+                            <% if(key!='p'){ %>
+                            <input type="hidden" name="<%= key %>" value="<%= queryObj[key] %>" />
+                            <% } %>
+                        <% } %>
+                        <li><input type="text" name="p" placeholder="跳转至" /></li><li class="go"><input class="btn" type="submit" value="GO" /></li>
+                    </form>
+                </ul>
+            </div>
+        </div>
+        
+        
+        <%- include footer %>
+        
+    </body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<%- include head %>
+</head>
+    <body>
+        <%- include header %>
+        <% 
+            let level = 0;
+
+            (userData.credit >= 5) && ( level=1 );
+            (userData.credit >= 20) && ( level=2 );
+            (userData.credit >= 50) && ( level=3 );
+            (userData.credit >= 100) && ( level=4 );
+            (userData.credit >= 300) && ( level=5 );
+        %>
+
+        <div class="wrap">
+            <div id="update-profile">
+                <div class="fl w260">
+                    <div class="update-profile-avatar">
+                        <img src="<%= userData ? (userData.avatar ? userData.avatar : '/assets/img/user-avatar-default.png' ) : '/assets/img/user-avatar-default.png' %>" />
+                        <div class="update-profile-avatar-upload btn" data-aspectRatio="1:1">
+                            <i class="lnr lnr-upload"></i>
+                        </div>
+                    </div>
+                    <div class="update-profile-name"><%= userData.name %></div>
+                    <div class="user-display-infomation-level">
+                        <div class="user-infomation-level">
+                            <b>Levl:<%= level %></b>
+                            <%- (level >= 3) ? '<span>Pro</span>' : '' %>
+                        </div>
+                    </div>
+                    <div class="update-profile-postscription"><%- userData.postScript ? userData.postScript.replace(/\n/g,'<br />') : '该用户很懒,没有个人介绍' %></div>
+                </div>
+                <div class="fr user-right">
+                    <div class="update-profile-change-link"><a class="btn orange" href="/user/account">修改密码</a></div>
+                    <div class="update-profile-title">修改资料</div>
+                    <div class="update-profile-container">
+                        <div class="update-profile-container-item">
+                            <div class="update-profile-container-title">基本资料</div>
+                            
+                            <div class="update-profile-container-line">
+                                <div class="update-profile-container-lt">性别</div>
+                                <% 
+                                    let male = ['男','女','未知'];
+                                %>
+
+                                <div class="update-profile-container-selection">
+                                    <ul>
+                                <% male.forEach( (ml) => { %>
+                                        <li <%= (ml==userData.male) ? ' class=cur' : '' %> ><i><b class="btn"></b></i><span><%= ml %></span></li>
+                                <% } ) %>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="update-profile-container-line">
+                                <div class="update-profile-container-line-input" style="margin-right:20px;">
+                                    <input maxLength="20" data-key="location" style="width:170px;" type="text" placeholder="所在地" value="<%= userData.location || '' %>" />
+                                </div><div class="update-profile-container-line-input">
+                                    <input maxLength="4" style="width:170px;" data-key="age" type="text" placeholder="年龄" value="<%= userData.age || '' %>" />
+                                </div>
+                            </div>
+                            
+                            <div class="update-profile-container-line">
+                                <div class="update-profile-container-lt">邮箱</div><span style="margin-right:20px" data-key="email" class="orange"><%= userData.email || '未绑定' %></span><div class="update-profile-container-btn btn">绑定邮箱</div>
+                            </div>
+                            
+                            <div class="update-profile-container-line">
+                                <div class="update-profile-container-textarea">
+                                    <textarea data-key="postScript" placeholder="个人介绍" name="postScript"><%= userData.postScript || '' %></textarea>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        
+                        <div class="update-profile-container-item">
+                            <div class="update-profile-container-title">职业信息</div>
+                            
+                            <div class="update-profile-container-line">
+                                <div class="update-profile-container-line-input">
+                                    <input maxLength="30" data-key="job" value="<%= userData.job || '' %>" type="text" placeholder="职业" />
+                                </div>
+                            </div>
+                            
+                            <div class="update-profile-container-line">
+                                <div class="update-profile-container-line-input">
+                                    <input maxLength="30" data-key="company" value="<%= userData.company || '' %>" type="text" placeholder="公司" />
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="update-profile-container-item">
+                            <div class="update-profile-container-title">社交账号</div>
+                            
+                            <div class="update-profile-container-line">
+                                <div class="update-profile-container-line-input">
+                                    <input maxLength="20" data-key="wechat" value="<%= userData.wechat || '' %>" type="text" placeholder="微信" />
+                                </div>
+                            </div>
+                            
+                            <div class="update-profile-container-line">
+                                <div class="update-profile-container-line-input">
+                                    <input maxLength="30" data-key="weibo" value="<%= userData.weibo || '' %>" type="text" placeholder="微博" />
+                                </div>
+                            </div>
+                            
+                            <div class="update-profile-container-line">
+                                <div class="update-profile-container-line-input">
+                                    <input maxLength="30" data-key="qq" value="<%= userData.qq || '' %>" type="text" placeholder="QQ" />
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="update-profile-container-item">
+                            <div class="update-profile-container-title">链接</div>
+                            
+                            <div class="update-profile-container-line">
+                                <div class="update-profile-container-line-input">
+                                    <input maxLength="30" data-key="link" value="<%= userData.link || '' %>" type="text" placeholder="个人主页" />
+                                </div>
+                            </div>
+                            
+                            <div class="update-profile-container-line">
+                                <div class="update-profile-container-line-input">
+                                    <input maxLength="30" data-key="be" value="<%= userData.be || '' %>" type="text" placeholder="Behance" />
+                                </div>
+                            </div>
+                            
+                            <div class="update-profile-container-line">
+                                <div class="update-profile-container-line-input">
+                                    <input maxLength="30" data-key="github" value="<%= userData.github || '' %>" type="text" placeholder="Github" />
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="update-profile-save btn fr">完成</div>
+                    <div class="clear"></div>
+                    
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+        
+        
+        <%- include footer %>
+    </body>
+</html>

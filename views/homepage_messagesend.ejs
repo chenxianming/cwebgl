@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<%- include head %>
+</head>
+    <body>
+        <%- include header %>
+        
+        <%- include user %>
+        
+        <div class="wrap">
+            <div class="homepage">
+                <div class="homepage-left w260">
+                    <div class="homepage-title">
+                        <i class="lnr lnr-user"></i><span>我的主页</span>
+                    </div>
+                    <%- include menu %>
+                </div>
+                
+                <div class="fr w758">
+                    <div class="pd30" style="padding-top:0">
+                        <div class="homepage-c">
+                            <ul>
+                                <li class="cur"><a href="/user/message?s=">全部</a></li><li><a href="/user/message?s=unread">未读消息<% if(userData.newMessage){ %><span class="orange">(<%= userData.newMessage %>)</span><% } %></a></li><li><a href="/user/message?s=read">已读消息</a></li>
+                            </ul>
+                        </div>
+
+                       <div class="homepage-send">
+                           <div class="homepage-send-title">
+                               <div class="pd20">
+                                   <input data-value="title" type="text" placeholder="标题" />
+                               </div>
+                           </div>
+                           <div class="homepage-send-title">
+                               <div class="pd20">
+                                   <input data-value="to" type="text" placeholder="收信人"<%- queryObj.to ? ` value=${queryObj.to}` : '' %> />
+                               </div>
+                           </div>
+                           <div class="homepage-send-content">
+                               <div class="pd20">
+                                   <textarea  data-value="content" placeholder="说些什么"></textarea>
+                               </div>
+                           </div>
+                       </div>
+                   
+                       <div class="fr">
+                           <div class="homepage-send-btn btn homepage-send-btn-sendevent">发送</div>
+                       </div>
+                       <div class="clear"></div>
+                       
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+       
+        <%- include footer %>
+        
+    </body>
+</html>

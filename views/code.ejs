@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include head %>
+</head>
+    <body>
+        <%- include header %>
+        
+        <div id="code-showcase">
+            <div class="wrap">
+                <div class="fl">
+                    <div class="code-showcase-img">
+                        <iframe scrolling="no" src="/code/<%= showcase.uuid %>?f=1" width="100%" height="100%" frameborder="0"></iframe>
+                        <a href="/code/<%= showcase.uuid %>">
+                            <div class="code-showcase-img-display">
+                                <div class="table">
+                                    <div class="cell"><%= showcase.title %></div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="fr">
+                    <div class="w310">
+                        <div class="code-showcase-infomation">
+                            <div class="pd20">
+                                <div class="user-infomation-title">
+                                   
+                                    <% 
+                                        let level = 0;
+
+                                        (showcase.authorDetail.credit >= 5) && ( level=1 );
+                                        (showcase.authorDetail.credit >= 20) && ( level=2 );
+                                        (showcase.authorDetail.credit >= 50) && ( level=3 );
+                                        (showcase.authorDetail.credit >= 100) && ( level=4 );
+                                        (showcase.authorDetail.credit >= 300) && ( level=5 );
+                                    %>
+                                   
+                                    <div class="user-infomation">
+                                        <div class="user-infomation-avatar">
+                                            <a href="/user/<%= showcase.authorDetail.uuid %>"><img src="<%= showcase.authorDetail.avatar || '/assets/img/user-avatar-default.png' %>" /></a>
+                                        </div>
+
+                                        <div class="user-infomation-desc">
+                                            <div class="user-infomation-name"><%= showcase.authorDetail.name %></div>
+                                            <div class="user-infomation-level" style="text-align:left;">
+                                                Levl:<%= level %>
+                                                <%- (level >= 3) ? '<span>Pro</span>' : '' %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="user-infomation-date">
+                                    <i class="lnr lnr-history"></i><span><%= showcase.postDate %></span>
+                                </div>
+                                <div class="user-infomation-field">
+                                    <div class="user-infomation-field-item">
+                                        <i class="lnr lnr-star"></i><span><%= showcase.collect %></span>
+                                    </div>
+                                    <div class="user-infomation-field-item">
+                                        <i class="lnr lnr-bubble"></i><span><%= showcase.comment %></span>
+                                    </div>
+                                    <div class="user-infomation-field-item">
+                                        <i class="lnr lnr-crop"></i><span><%= showcase.fork %></span>
+                                    </div>
+                                </div>
+                                <div class="user-infomation-description">
+                                    <p><%= showcase.description %></p>
+                                </div>
+                                
+                                <div class="user-infomation-collection btn collect-event" data-uuid="<%= data.uuid %>" data-type="code">
+                                    <a href="#"><i class="lnr lnr-star"></i><span>收藏</span></a>
+                                </div>
+                                <div class="user-infomation-fork btn" data-uuid="<%= showcase.uuid %>">
+                                    <a href="#"><i class="lnr lnr-crop"></i><span>FOKR</span></a>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+        
+        <div id="filter">
+            <div class="wrap">
+                <div class="fl code-more">你可以查看，修改，FORK其他用户分享的WEBGL场景源代码</div>
+                <div class="fr">
+                    <div id="sort">
+                        <div class="table">
+                            <div class="cell">
+                               
+                                <% let temp = Object.assign({},queryObj); %>
+                                
+                                <% temp.sort='postDate-'+( (data.sort && data.sort.postDate) >0 ? 0 : 1) %>
+                                <a href="/code?<%= querystring.stringify(temp) %>" class="btn sort-i<%= ( data.sort.hasOwnProperty('postDate') ) ? ' active' : '' %>">
+                                    <span>时间</span><i class="lnr-arrow-<%= data.sort.postDate>0 ? 'down' : 'up' %> lnr"></i>
+                                </a>
+                                
+                                
+                                <% let vTemp = Object.assign({},queryObj); %>
+                                <% vTemp.sort='views-'+( (data.sort && data.sort.views) >0 ? 0 : 1) %>
+                                <a href="/code?<%= querystring.stringify(vTemp) %>" class="btn sort-i<%= ( data.sort.hasOwnProperty('views') ) ? ' active' : '' %>">
+                                    <span>热门</span><i class="lnr-arrow-<%= data.sort.views>0 ? 'down' : 'up' %> lnr"></i>
+                                </a>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+                 
+        <div id="code-list">
+            <div class="wrap">
+                <div class="code-list">
+                    <% data.result.forEach( (item) => { %>
+                    <div class="code-list-item">
+                        <div class="code-list-item-img">
+                            <a href="/code/<%= item.uuid %>"><img src="<%= item.litpic %>" /></a>
+                        </div>
+                        <div class="code-list-item-title"><%= item.title %></div>
+                        <div class="code-list-item-desc">
+                            <div class="fl">
+                               
+                                <% 
+                                    let level = 0;
+
+                                    (item.userDetail.credit >= 5) && ( level=1 );
+                                    (item.userDetail.credit >= 20) && ( level=2 );
+                                    (item.userDetail.credit >= 50) && ( level=3 );
+                                    (item.userDetail.credit >= 100) && ( level=4 );
+                                    (item.userDetail.credit >= 300) && ( level=5 );
+                                %>
+                               
+                                <div class="user-infomation show-tips">
+                                    <div class="user-infomation-avatar">
+                                        <a href="/user/<%= item.userDetail.uuid %>"><img src="<%= item.userDetail.avatar || '/assets/img/user-avatar-default.png' %>" /></a>
+                                    </div>
+                                    
+                                    <div class="user-infomation-desc">
+                                        <div class="user-infomation-name"><%= item.userDetail.name %></div>
+                                        <div class="user-infomation-level">
+                                            Levl:<%= level %>
+                                            <%- (level >= 3) ? '<span>Pro</span>' : '' %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fr">
+                                <div class="code-list-item-desc-d">
+                                    <i class="lnr lnr-star"></i><span><%= item.collection %></span>
+                                </div>
+                                <div class="code-list-item-desc-d">
+                                    <i class="lnr lnr-bubble"></i><span><%= item.comment %></span>
+                                </div>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                    <% } ) %>
+                    
+                    <div class="clear"></div>
+                    
+                </div>
+            </div>
+        </div>
+        
+        <div class="wrap">
+
+            <% 
+                let page = [];
+                let count = data.count;
+                let last = Math.ceil( data.count / 15 );
+                let cur = (data.offset);
+
+                let range = [];
+
+                if(cur>=3){
+                    range.push(cur-3);
+                    range.push( (cur+2 > last) ? last : (cur+2) );
+                }else{
+                    range.push(0);
+                    range.push( (4 > last) ? last : (4) );
+                }
+
+                for(let i = range[0];i<range[1];i++){
+                    page.push(i+1);
+                }
+
+            %>
+
+            <% if(cur > 1){ %>
+            <% queryObj.p = cur-1; %>
+            <div id="prev" class="btn"><a href="/code?<%= querystring.stringify(queryObj) %>"><i class="lnr lnr-chevron-left"></i></a></div>
+            <% } %>
+
+            <% if(cur < last){ %>
+            <% queryObj.p = cur+1; %>
+            <div id="next" class="btn"><a href="/code?<%= querystring.stringify(queryObj) %>"><i class="lnr lnr-chevron-right"></i></a></div>
+            <% } %>
+
+            <div id="page">
+                <ul>
+                    <% if(cur>=4){ %>
+                        <% queryObj.p = 1; %>
+                        <li><a class="btn" href="/code?<%= querystring.stringify(queryObj) %>">
+                            <i class="lnr lnr-chevron-left"></i>
+                        </a></li>
+                    <% } %>
+
+                    <% page.forEach( (p) => { %>
+                        <% queryObj.p = p; %>
+                        <li <%= (p==cur) ? ' class=cur' : '' %> ><a class="btn" href="/code?<%= querystring.stringify(queryObj) %>"><%= p %></a></li>
+                    <% } ) %>
+                    <% queryObj.p = last; %>
+                    <% queryObj.p = last; %>
+                    <li>...</li><li><a class="btn" href="/code?<%= querystring.stringify(queryObj) %>"><%= last %></a></li>
+                    <form action="/code?<%= querystring.stringify(queryObj) %>">
+                        <% for( let key in queryObj ){ %>
+                            <% if(key!='p'){ %>
+                            <input type="hidden" name="<%= key %>" value="<%= queryObj[key] %>" />
+                            <% } %>
+                        <% } %>
+                        <li><input type="text" name="p" placeholder="跳转至" /></li><li class="go"><input class="btn" type="submit" value="GO" /></li>
+                    </form>
+                </ul>
+            </div>
+
+        </div>
+       
+       
+        <%- include footer %>
+        
+    </body>
+</html>

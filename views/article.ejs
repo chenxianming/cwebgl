@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<%- include head %>
+</head>
+    <body>
+        <%- include header %>
+        <div id="scene"><div class="slogan"><img src="/slogan.png" /></div></div>
+        <div id="article">
+            <div class="wrap">
+                <div class="fl">
+                    <div class="w690">
+                        <div class="article-list">
+                            <% data.result && data.result.forEach( (dt) => { %>
+                            
+                            <div class="article-item">
+                                <div class="fl">
+                                    <div class="article-item-pic">
+                                        <a href="/article/<%= dt.uuid %>.html"><img src="<%= dt.litpic %>" /></a>
+                                    </div>
+                                </div>
+                                <div class="fr">
+                                    <div class="article-item-post">
+                                        <div class="article-item-title">
+                                            <a href="/article/<%= dt.uuid %>.html"><%= dt.title %></a>
+                                        </div>
+                                        <div class="article-item-description">
+                                            <%- dt.description %>
+                                        </div>
+                                        <div class="display">
+                                            <div class="display-item"><i class="lnr lnr-eye"></i><span><%= dt.views %></span></div><div class="display-item"><i class="lnr lnr-bubble"></i><span><%= dt.comment %></span></div><div class="display-item"><i class="lnr lnr-history"></i><span><%= dt.postDate %></span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                            
+                            <% } ) %>
+                            
+                        </div>
+                        
+                        <div class="list-more article-list-more btn">
+                            <i class="lnr lnr-redo"></i><span>加载下一页</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="fr">
+                    <div class="w310">
+                        <% if(latestPick){ %>
+                        <div class="sub-display">
+                            <div class="sub-display-title"><h3>最新专栏</h3></div>
+                            <div class="sub-display-content">
+                                <% let url = latestPick.articles[0] ? `/article/${ latestPick.articles[0].uuid }.html` : '#article'; %>
+                                <div class="sub-display-content-spec">
+                                    <div class="sub-display-content-spec-img">
+                                        <a href="<%= url %>"><img src="<%= latestPick.litpic %>" /></a>
+                                    </div>
+                                    <div class="sub-display-content-spec-title">
+                                        <a href="<%= url %>"><%= latestPick.title %></a>
+                                    </div>
+                                    <div class="sub-display-content-spec-desc">
+                                        <%- latestPick.description %>
+                                    </div>
+                                    <div class="sub-display-content-spec-list">
+                                        <ul>
+                                            <% for(let i = 0;i<4;i++){ 
+                                                if(!latestPick.articles[i]){ break ; }
+                                            %>
+                                            <li><a href="/article/<%= latestPick.articles[i].uuid %>.html"><%= latestPick.articles[i].title %></a></li>
+                                            <% } %>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <% } %>
+                        
+                        <div class="sub-display">
+                            <div class="sub-display-title" style="margin-bottom:0"><h3>热门文章</h3></div>
+                            <div class="sub-display-content">
+                                <div class="sub-display-content-spec">
+                                    <div class="sub-display-content-spec-list">
+                                        <ul>
+                                            <% hotList.result && hotList.result.forEach( (hot) => { %>
+                                            <li><a href="/article/<%= hot.uuid %>.html"><%= hot.title %></a></li>
+                                            <% } ) %>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="sub-display">
+                            <div class="sub-display-title"><h3>代码广场</h3></div>
+                            <div class="sub-display-content">
+                                <div class="sub-display-content-showcase">
+                                    <% code.forEach( (item) => { %>
+                                    <div class="code-list-item-img sub-display-content-showcase-item">
+                                        <a href="/code/<%= item.uuid %>">
+                                            <img src="<%= item.litpic %>" />
+                                            <div class="sub-display-content-showcase-item-desc">
+                                                <div class="table">
+                                                    <div class="cell">
+                                                        <div class="sub-display-content-showcase-item-text"><%= item.title %></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <% } ) %>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="sub-display">
+                            <div class="sub-display-title" style="margin-bottom:0"><h3>论坛热帖</h3></div>
+                            <div class="sub-display-content">
+                                <div class="sub-display-content-spec">
+                                    <div class="sub-display-content-spec-list">
+                                        <ul>
+                                            <% community.forEach( (item) => { %>
+                                            <li><a href="/community/<%= item.uuid %>.html"><%= item.title %></a></li>
+                                            <% } ) %>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+        
+        <div class="hidden">
+            <!-- for search spider -->
+            <% 
+                let page = [];
+                let count = data.count;
+                let last = Math.ceil( data.count / (data.limit || 10) );
+                let cur = (data.offset);
+
+                let range = [];
+
+                if(cur>=3){
+                    range.push(cur-3);
+                    range.push( (cur+2 > last) ? last : (cur+2) );
+                }else{
+                    range.push(0);
+                    range.push( (4 > last) ? last : (4) );
+                }
+
+                for(let i = range[0];i<range[1];i++){
+                    page.push(i+1);
+                }
+
+            %>
+
+            <% if(cur > 1){ %>
+            <% queryObj.p = cur-1; %>
+            <div id="prev" class="btn"><a href="/article?<%= querystring.stringify(queryObj) %>"><i class="lnr lnr-chevron-left"></i></a></div>
+            <% } %>
+
+            <% if(cur < last){ %>
+            <% queryObj.p = cur+1; %>
+            <div id="next" class="btn"><a href="/article?<%= querystring.stringify(queryObj) %>"><i class="lnr lnr-chevron-right"></i></a></div>
+            <% } %>
+
+            <div id="page">
+                <ul>
+                    <% if(cur>=4){ %>
+                        <% queryObj.p = 1; %>
+                        <li><a class="btn" href="/article?<%= querystring.stringify(queryObj) %>">
+                            <i class="lnr lnr-chevron-left"></i>
+                        </a></li>
+                    <% } %>
+
+                    <% page.forEach( (p) => { %>
+                        <% queryObj.p = p; %>
+                        <li <%= (p==cur) ? ' class=cur' : '' %> ><a class="btn" href="/article?<%= querystring.stringify(queryObj) %>"><%= p %></a></li>
+                    <% } ) %>
+                    <% queryObj.p = last; %>
+                    <li>...</li><li><a class="btn" href="/article?<%= querystring.stringify(queryObj) %>"><%= last %></a></li>
+                    <form action="/article?<%= querystring.stringify(queryObj) %>">
+                        <% for( let key in queryObj ){ %>
+                            <% if(key!='p'){ %>
+                            <input type="hidden" name="<%= key %>" value="<%= queryObj[key] %>" />
+                            <% } %>
+                        <% } %>
+                        <li><input type="text" name="p" placeholder="跳转至" /></li><li class="go"><input class="btn" type="submit" value="GO" /></li>
+                    </form>
+                </ul>
+            </div>
+        </div>
+
+        <%- include footer %>
+        
+    </body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include head %>
+    <style>
+        *{ padding:0; margin:0; }
+        html,body,
+        .box,
+        iframe{ width:100%; height:100%; position:relative; overflow:hidden; }
+        
+        .box iframe{ display:inline-block; width:50%; }
+        
+        #share-code{ top:95px; }
+        
+    </style>
+</head>
+    <% if(isVr){ %>
+        <div class="box">
+            <iframe id="preview-mode" scrolling="no" src="/code/preview" width="50%" height="100%" frameborder="0"></iframe><iframe src="/code/preview" width="50%" height="100%" frameborder="0" scrolling="no"></iframe>
+        </div>
+    <% }else{ %>
+        <iframe id="preview-mode" scrolling="no" src="/code/preview" width="100%" height="100%" frameborder="0"></iframe>
+    <% } %>
+    
+    <% if(!isVr && queryObj.share){ %>
+        <div class="code-action">
+            <div class="code-action-icon share-code" title="分享">
+                <i class="lnr lnr-code"></i>
+            </div><div class="code-action-icon" title="查看更多">
+                <a target="_blank" class="btn" href="https://www.cwebgl.com/code/<%= data.uuid %>"><i class="lnr lnr-link"></i></a>
+            </div>
+        </div>
+        
+        <div id="share-code" class="preview-mode">
+            <p style="margin-top:15px;">复制嵌入代码</p>
+            <input type="text" value='<iframe scrolling="no" src="https://www.cwebgl.com/code/<%= data.uuid %>?f=1&share=1" width="100%" height="100%" frameborder="0"></iframe>' title="复制嵌入代码" />
+            <p>复制链接</p>
+            <input type="text" value='https://www.cwebgl.com/code/<%= data.uuid %>?f=1&share=1' title="复制链接" />
+        </div>
+        
+    <% } %>
+    
+    <%- include footer %>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<%- include head %>
+</head>
+    <body>
+        <%- include header %>
+        
+        <%- include user %>
+        
+        <div class="wrap">
+            <div class="homepage">
+                <div class="homepage-left w260">
+                    <div class="homepage-title">
+                        <i class="lnr lnr-user"></i><span>我的主页</span>
+                    </div>
+                    <%- include menu %>
+                </div>
+                <div class="content-edit fr w758 content-post" data-type="newWebsite">
+                    <h2 class="homepage-container-title">提交酷站</h2>
+                    <div class="homepage-container" style="margin-bottom:20px">
+                        <div class="homepage-container-line">
+                            <div class="pd20">
+                                <div class="homepage-container-line-title">标题<span class="orange">*</span></div>
+                                <div class="homepage-input edit-field-article-title">
+                                    <input data-value="title" type="text" placeholder="标题" />
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="homepage-container-line">
+                            <div class="pd20">
+                                <div class="homepage-container-line-title">链接<span class="orange">*</span></div>
+                                <div class="homepage-input edit-field-article-title">
+                                    <input data-value="link" type="text" placeholder="链接" />
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="homepage-container-line">
+                            <div class="pd20">
+                                <div class="homepage-container-line-title">描述<span class="orange">*</span></div>
+                                <div class="homepage-taxtarea">
+                                    <textarea data-value="description" placeholder="描述"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="homepage-container-line">
+                            <div class="pd20">
+                                <div class="homepage-container-line-title">标签</div>
+                                <div class="homepage-container-line-p">对该内容添加标签，便于关键词搜索</div>
+                                <div>
+                                    <div class="tags">
+                                        <ul></ul>
+                                    </div>
+                                    <div style="margin-right:10px;" class="homepage-input edit-field-article-form">
+                                        <input class="tag-input" type="text" placeholder="关键字" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="fr">
+                        <div class="submit-site post-content-submit btn">投稿</div>
+                    </div>
+                    <div class="clear"></div>
+                    
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+       
+        <%- include footer %>
+        
+    </body>
+</html>

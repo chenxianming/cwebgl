@@ -1,0 +1,20 @@
+    <% 
+        let keywords = ['webgl教程','3D动画','代码分享','webgl讨论'],
+            descriptionStr = '有关用户体验与设计的最前沿';
+        
+        if( typeof(data) != 'undefined' ){
+            
+            data.tags && data.tags.forEach( (tag) => {
+                keywords.unshift( tag );
+            } );
+
+            data.description && ( descriptionStr = data.description.substring(0,60) );
+        }
+    %>
+    <meta charset="UTF-8">
+    <title><%= title %> - CWEBGL 用户体验与设计的最前沿</title>
+    <link rel='stylesheet' href='/assets/img/style.css' />
+    <link rel="stylesheet" type="text/css" href="/assets/img/imgareaselect-default.css" />
+    <meta name="renderer" content="webkit">
+    <meta name="keywords" content="<%= keywords.join(',') %>" />
+    <meta name="description" content="<%= descriptionStr %>" />

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include head %>
+</head>
+    <body>
+        <%- include header %>
+        
+        <div id="forum">
+            <div class="wrap">
+
+                    <div class="fl">
+                        <div class="forum-content w690">
+                            <div class="forum-title">
+                                <div class="fl">
+                                    <div class="forum-content-tag">
+                                        <% 
+                                            let tempArr = ['全部','讨论','求助','教程','精华','置顶'],
+                                                tempObjArr = [];
+                                        
+                                                tempArr.forEach( (key,idx) => {
+                                                    tempObjArr[idx] = Object.assign({},queryObj);
+                                                    tempObjArr[idx].t = key;
+                                                } );
+                                        %>
+                                        
+                                        <% tempArr.forEach( (tpa,idx) => { %><a class="<%- (queryObj.t == tpa || (!queryObj.t && idx==0) ) ? 'cur btn' : 'btn' %>" href="/community?<%= querystring.stringify(tempObjArr[idx]) %>"><%= tpa %></a><% } ) %>
+                                        
+                                    </div>
+                                </div>
+                                
+                                <div class="fr">
+                                    <div id="sort">
+                                        <div class="table">
+                                            <div class="cell">
+
+                                                <% let temp = Object.assign({},queryObj); %>
+
+                                                <% temp.sort='sortDate-'+( (data.sort && data.sort.sortDate) >0 ? 0 : 1) %>
+                                                <a href="/community?<%= querystring.stringify(temp) %>" class="btn sort-i<%= ( data.sort.hasOwnProperty('sortDate') ) ? ' active' : '' %>">
+                                                    <span>时间</span><i class="lnr-arrow-<%= data.sort.sortDate>0 ? 'down' : 'up' %> lnr"></i>
+                                                </a>
+                                                
+                                                <% let vTemp = Object.assign({},queryObj); %>
+                                                <% vTemp.sort='views-'+( (data.sort && data.sort.views) >0 ? 0 : 1) %>
+                                                <a href="/community?<%= querystring.stringify(vTemp) %>" class="btn sort-i<%= ( data.sort.hasOwnProperty('views') ) ? ' active' : '' %>">
+                                                    <span>热门</span><i class="lnr-arrow-<%= data.sort.views>0 ? 'down' : 'up' %> lnr"></i>
+                                                </a>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="clear"></div>
+                            </div>
+                            
+                            <div class="forum-list">
+                                <% data.result.forEach( (item) => { %>
+                                <div class="forum-list-item">
+                                    <div class="fl">
+                                        <div class="table">
+                                            <div class="cell">
+                                                <div class="forum-list-item-avatar">
+                                                    <a href="/user/<%= item.userDetail.uuid %>"><img src="<%= (item.userDetail && item.userDetail.avatar) ? item.userDetail.avatar : '/assets/img/user-avatar-default.png' %>" /></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fl">
+                                        <div class="table">
+                                            <div class="cell">
+                                                <div class="forum-list-item-t1">
+                                                    <span<%= ( item.type=='精华' ) ? ' class=l' : ''  %><%= ( item.type=='置顶' ) ? ' class=b' : ''  %> ><%= item.type %></span><a class="btn" href="/community/<%= item.uuid %>.html"><%= item.title %></a>
+                                                </div>
+                                                
+                                                <% 
+                                                    let level = 0;
+
+                                                    (item.userDetail.credit >= 5) && ( level=1 );
+                                                    (item.userDetail.credit >= 20) && ( level=2 );
+                                                    (item.userDetail.credit >= 50) && ( level=3 );
+                                                    (item.userDetail.credit >= 100) && ( level=4 );
+                                                    (item.userDetail.credit >= 300) && ( level=5 );
+                                                %>
+                                                <div class="forum-list-item-t2">
+                                                    <a href="/user/<%= item.userDetail.uuid %>" class="name"><%= item.userDetail.name %></a><span class="levl">Levl:<%= level %></span><%- (level >= 3) ? '<span class="pro">Pro</span>' : '' %><span class="postby">最后回复:<%= item.latest.postDate %>  By <b><%= item.latestDetail.name %></b></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fr">
+                                        <div class="table">
+                                            <div class="cell">
+                                                <a class="btn" href="/community/<%= item.uuid %>.html"><i class="lnr lnr-bubble"></i><span><%= item.threadCount*1-1 %></span></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clear"></div>
+                                </div>
+                                <% } ) %>
+
+                            </div>
+                            
+                            
+                            <% 
+                                let page = [];
+                                let count = data.count;
+                                let last = Math.ceil( data.count / 10 );
+                                let cur = (data.offset);
+
+                                let range = [];
+
+                                if(cur>=3){
+                                    range.push(cur-3);
+                                    range.push( (cur+2 > last) ? last : (cur+2) );
+                                }else{
+                                    range.push(0);
+                                    range.push( (4 > last) ? last : (4) );
+                                }
+
+                                for(let i = range[0];i<range[1];i++){
+                                    page.push(i+1);
+                                }
+
+                            %>
+
+                            <% if(cur > 1){ %>
+                            <% queryObj.p = cur-1; %>
+                            <div id="prev" class="btn"><a href="/community?<%= querystring.stringify(queryObj) %>"><i class="lnr lnr-chevron-left"></i></a></div>
+                            <% } %>
+
+                            <% if(cur < last){ %>
+                            <% queryObj.p = cur+1; %>
+                            <div id="next" class="btn"><a href="/community?<%= querystring.stringify(queryObj) %>"><i class="lnr lnr-chevron-right"></i></a></div>
+                            <% } %>
+
+                            <div id="page">
+                                <ul>
+                                    <% if(cur>=4){ %>
+                                        <% queryObj.p = 1; %>
+                                        <li><a class="btn" href="/community?<%= querystring.stringify(queryObj) %>">
+                                            <i class="lnr lnr-chevron-left"></i>
+                                        </a></li>
+                                    <% } %>
+
+                                    <% page.forEach( (p) => { %>
+                                        <% queryObj.p = p; %>
+                                        <li <%= (p==cur) ? ' class=cur' : '' %> ><a class="btn" href="/community?<%= querystring.stringify(queryObj) %>"><%= p %></a></li>
+                                    <% } ) %>
+                                    <% queryObj.p = last; %>
+                                    <li>...</li><li><a class="btn" href="/community?<%= querystring.stringify(queryObj) %>"><%= last %></a></li>
+                                    <form action="/community?<%= querystring.stringify(queryObj) %>">
+                                        <% for( let key in queryObj ){ %>
+                                            <% if(key!='p'){ %>
+                                            <input type="hidden" name="<%= key %>" value="<%= queryObj[key] %>" />
+                                            <% } %>
+                                        <% } %>
+                                        <li><input type="text" name="p" placeholder="跳转至" /></li><li class="go"><input class="btn" type="submit" value="GO" /></li>
+                                    </form>
+                                </ul>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div class="fr">
+                        <div class="forum-sub w310">
+                          
+                            <div class="sub-display">
+                                <div class="sub-display-title" style="margin-bottom:10px"><h3>论坛信息</h3></div>
+                                <div class="sub-display-content">
+                                    <div class="forum-infomation">
+                                        <p>今日发表：<%= data.today || 0 %></p>
+                                        <p>昨日发表：<%= data.yestoday || 0 %></p>
+                                        <p>主题：<%= data.topicCount %></p>
+                                        <p>回复：<%= data.threadCount %></p>
+                                    </div>
+                                </div>
+                            </div>
+                           
+                            <div class="sub-display">
+                                <div class="sub-display-title" style="margin-bottom:0"><h3>论坛热帖</h3></div>
+                                <div class="sub-display-content">
+                                    <div class="sub-display-content-spec">
+                                        <div class="sub-display-content-spec-list">
+                                            <ul>
+                                                <% hotList.result.forEach( (item) => { %>
+                                                <li><a href="/community/<%= item.uuid %>.html"><%= item.title %></a></li>
+                                                <% } ) %>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+    
+                       
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+            </div>
+        </div>
+        
+        <%- include footer %>
+        
+    </body>
+</html>

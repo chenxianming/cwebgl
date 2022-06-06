@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<%- include head %>
+</head>
+    <body>
+        <%- include header %>
+        
+        <%- include user %>
+        
+        <div class="wrap">
+            <div class="homepage">
+                <div class="homepage-left w260">
+                    <div class="homepage-title">
+                        <i class="lnr lnr-user"></i><span>我的主页</span>
+                    </div>
+                    <%- include menu %>
+                </div>
+                <div class="content-edit fr w758 content-post" data-type="editArticle" data-target="newPost">
+                    <h2 class="homepage-container-title"><%- data.status=='pending' ? '<span style="margin-right:10px;" class=orange>(正在审核)</span>' : '' %><%= title %></h2>
+                    <div class="homepage-container" style="margin-bottom:20px">
+                        <div class="homepage-container-line">
+                            <div class="pd20">
+                                <div class="homepage-container-line-title">标题<span class="orange">*</span></div>
+                                <div class="homepage-input edit-field-article-title">
+                                    <input value="<%= data.title %>" data-value="title" type="text" placeholder="标题" />
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="homepage-container-line">
+                            <div class="pd20">
+                                <div class="homepage-container-line-title">栏目分类<span class="orange">*</span></div>
+                                <div class="homepage-container-line-selector" data-value="categories">
+                                    <ul>
+                                        <% let cates = ['WEBGL教程','原创文章','翻译文章','WEBGL资讯']; %>
+                                        <% cates.forEach( (ct) => { %>
+                                        <li><i class="btn homepage-container-sl<%= data.categories==ct ? ' selected' : '' %>"><b></b></i><span><%= ct %></span></li>
+                                        <% } ) %>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="homepage-container-line">
+                            <div class="pd20">
+                                <div class="homepage-container-line-title">所属分类</div>
+                                <div class="homepage-container-line-pick">
+                                    <div class="homepage-container-line-pick-selector" data-default="<%= (pick.pick ? pick.pick.uuid : '') %>">
+                                        <span class="homepage-container-line-pick-name"><%= (pick.pick ? pick.pick.title : '选择分栏') %></span>
+                                        <i class="lnr lnr-chevron-down"></i>
+                                        <div class="homepage-container-line-pick-selector-ul">
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="homepage-container-line-pick-selector-btn btn" data-type="edit">编辑该分栏</div>
+                                    <div class="homepage-container-line-pick-selector-btn btn" data-type="remove">删除该分栏</div>
+                                    <div id="newPick" class="homepage-container-line-pick-new orange btn">新建分栏</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="homepage-container-line">
+                            <div class="pd20">
+                                <div class="homepage-container-line-title">版权信息</div>
+                                <div class="homepage-container-line-selector" data-type="multi">
+                                    <ul>
+                                        <li><i class="btn homepage-container-sl is-created<%= (data.from=='CWEBGL原创') ? ' selected' : '' %>"><b></b></i><span>原创</span></li>
+                                    </ul>
+                                </div>
+                                <div class="homepage-container-line-p">如果为转载，请注明出处</div>
+                                <div>
+                                    <div style="margin-right:10px;" class="homepage-input edit-field-article-form">
+                                        <input value="<%= data.from %>" data-value="from" style="width:130px;" type="text" placeholder="来源" />
+                                    </div><div class="homepage-input edit-field-article-fromLink">
+                                        <input value="<%= data.fromLink %>" data-value="fromLink" style="width:470px;" type="text" placeholder="链接" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="homepage-container-line">
+                            <div class="pd20">
+                                <div class="homepage-container-line-title">匿名信息</div>
+                                <div class="homepage-container-line-selector" data-type="multi" data-value="anonymous">
+                                    <ul>
+                                        <li><i class="btn homepage-container-sl<%= (data.anonymous==1) ? ' selected' : '' %>"><b></b></i><span>匿名发表</span></li>
+                                    </ul>
+                                </div>
+                                <div class="homepage-container-line-p" style="margin-bottom:0;">选择该选项，将不会显示作者信息</div>
+                            </div>
+                        </div>
+                        
+                        <div class="homepage-container-line">
+                            <div style="width:710px;border:none;margin-bottom:0" class="comment-reply-post post" data-usage="face,link,image,code,cloud,headline,bold,list,audio,video,attachment,paragraph" data-type="article" data-event="reply">
+                                <div class="post-title">
+                                </div>
+                                <div class="post-content">
+                                    <div class="pd20">
+                                        <div data-value="content" class="post-content-textarea" contenteditable="true"><%- data.content %></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="homepage-container-line">
+                            <div class="pd20">
+                                <div class="homepage-container-line-title">标签</div>
+                                <div class="homepage-container-line-p">对该内容添加标签，便于关键词搜索</div>
+                                <div>
+                                    <div class="tags" data-value="anonymous">
+                                        <ul><% data.tags.forEach( (tg) => { %><li><span><%= tg %></span><i class="remove-tag lnr btn lnr-cross"></i></li><% } ) %></ul>
+                                    </div>
+                                    <div style="margin-right:10px;" class="homepage-input edit-field-article-form">
+                                        <input class="tag-input" type="text" placeholder="关键字" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="fr">
+                        <div class="post-content-submit btn">保存</div>
+                    </div>
+                    <div class="clear"></div>
+                    
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+       
+        <script>
+            (window.global) || (window.global = {});
+            global['relationUUID'] = '<%- relationUUID %>';
+            global['relationUUID'] = global['relationUUID'].replace(/fanxiegang/g,'\\');
+        </script>
+        <%- include footer %>
+    </body>
+</html>

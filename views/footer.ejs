@@ -1,0 +1,79 @@
+        <% if(typeof(unfooter) == 'undefined' ){ %>
+        <div id="footer">
+            <div class="wrap">
+                <div class="fl">
+                    <div class="copy">
+                        <div class="table">
+                            <div class="cell">
+                                <div id="logo2">
+                                    <a href="/"><img src="/assets/img/logo2.png" /></a>
+                                </div>
+                                <p>CWEBGL不涉及任何违法内容<br />仅供学习及推动互联网发展</p>
+                                <p><span>联系</span><a href="mailto:contact@cwebgl.com">contact@cwebgl.com</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="fr">
+                    <div class="fnav-item">
+                        <div class="fnav-item-title">文章</div>
+                        <ul>
+                            <li><a href="/article?c=原创文章">原创文章</a></li>
+                            <li><a href="/article?c=WEBGL资讯">WEBGL资讯</a></li>
+                            <li><a href="/article?c=翻译文章">翻译文章</a></li>
+                            <li><a href="/article?c=WEBGL教程">WEBGL教程</a></li>
+                            <li><a href="/pick">栏目专题</a></li>
+                        </ul>
+                    </div>
+                    <div class="fnav-item">
+                        <div class="fnav-item-title">酷站</div>
+                        <ul>
+                            <li><a href="/website?l=英文">英文</a></li>
+                            <li><a href="/website?l=韩文">韩文</a></li>
+                            <li><a href="/website?l=日文">日文</a></li>
+                            <li><a href="/website?l=中文">中文</a></li>
+                            <li><a href="/website?l=其他">其他</a></li>
+                        </ul>
+                    </div>
+                    <div class="fnav-item">
+                        <div class="fnav-item-title">代码</div>
+                        <ul>
+                            <li><a href="/code?sort=views-1">最热</a></li>
+                            <li><a href="/code?sort=postDate-1">最新</a></li>
+                        </ul>
+                    </div>
+                    <div class="fnav-item">
+                        <div class="fnav-item-title">热帖</div>
+                        <ul>
+                            <li><a href="/community?sort=sortDate-1">最新</a></li>
+                            <li><a href="/community?t=求助">求助</a></li>
+                            <li><a href="/community?t=教程">教程</a></li>
+                            <li><a href="/community?t=精华">精华</a></li>
+                        </ul>
+                    </div>
+
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+        <% } %>
+        <div class="user-tool">
+            <% if(prevPage && (typeof(unfooter) == 'undefined') ){ %><div class="user-tool-back btn"><a href="<%= prevPage %>"><i class="lnr lnr-chevron-left"></i></a></div><% } %><% if( typeof(unfooter) == 'undefined' ){ %><div class="user-tool-up btn"><i class="lnr lnr-chevron-up"></i></div> <% } %>
+            
+        </div>
+        
+        <script src="/js/19640779.js"></script>
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/jquery.imgareaselect.pack.js"></script>
+        <script src="/js/jsencrypt.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/92/three.min.js"></script>
+        <script src="/js/qiniu.min.js"></script>
+        <script>
+            (window.global) || (window.global = {});
+
+            global['token'] = '<%= key ? key.token : '' %>';
+            global['key'] = '<%= key ? key.key : '' %>';
+            
+            global['assets'] = 'http://pcknljbyy.bkt.clouddn.com';
+        </script>
+        <script src="/js/app.js"></script>

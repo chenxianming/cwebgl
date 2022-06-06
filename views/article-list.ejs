@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<%- include head %>
+</head>
+    <body>
+        <%- include header %>
+
+        <div class="article">
+            <div class="table">
+                <div class="cell">
+                    <div class="wrap">
+                        <% 
+                            let desc = '';
+                        
+                            switch( queryObj.c ){
+                                case '原创文章' :
+                                    {
+                                        desc = 'CWEBGL作者原创内容,欢迎大家投稿交流';
+                                    }
+                                    break ;
+                                    
+                                case 'WEBGL资讯' :
+                                    {
+                                        desc = '关于WEBGL的新鲜咨询';
+                                    }
+                                    break ;
+                                    
+                                case '翻译文章' :
+                                    {
+                                        desc = '原创转载国外翻译内容';
+                                    }
+                                    break ;
+                                    
+                                case 'WEBGL教程' :
+                                    {
+                                        desc = '收录国内外原创转载教程，让您学应用WebGL制作各类场景';
+                                    }
+                                    break ;
+                                    
+
+                            }
+                        %>
+                        <h2><%= queryObj.c %></h2>
+                        <p><%= desc %></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="article">
+            <div class="wrap">
+                <div class="fl">
+                    <div class="w690">
+                       
+                        <div class="article-list">
+                            <% data.result && data.result.forEach( (dt) => { %>
+                            
+                            <div class="article-item">
+                                <div class="fl">
+                                    <div class="article-item-pic">
+                                        <a href="/article/<%= dt.uuid %>.html"><img src="<%= dt.litpic %>" /></a>
+                                    </div>
+                                </div>
+                                <div class="fr">
+                                    <div class="article-item-post">
+                                        <div class="article-item-title">
+                                            <a href="/article/<%= dt.uuid %>.html"><%= dt.title %></a>
+                                        </div>
+                                        <div class="article-item-description">
+                                            <%- dt.description %>
+                                        </div>
+                                        <div class="display">
+                                            <div class="display-item"><i class="lnr lnr-eye"></i><span><%= dt.views %></span></div><div class="display-item"><i class="lnr lnr-bubble"></i><span><%= dt.comment %></span></div><div class="display-item"><i class="lnr lnr-history"></i><span><%= dt.postDate %></span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                            
+                            <% } ) %>
+                            
+                        </div>
+                        
+                        <div class="list-more article-list-more btn">
+                            <i class="lnr lnr-redo"></i><span>加载下一页</span>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="fr">
+                    <div class="w310">
+                        <% if(latestPick){ %>
+                        <div class="sub-display">
+                            <div class="sub-display-title"><h3>最新专栏</h3></div>
+                            <div class="sub-display-content">
+                                <% let url = latestPick.articles[0] ? `/article/${ latestPick.articles[0].uuid }.html` : '#article'; %>
+                                <div class="sub-display-content-spec">
+                                    <div class="sub-display-content-spec-img">
+                                        <a href="<%= url %>"><img src="<%= latestPick.litpic %>" /></a>
+                                    </div>
+                                    <div class="sub-display-content-spec-title">
+                                        <a href="<%= url %>"><%= latestPick.title %></a>
+                                    </div>
+                                    <div class="sub-display-content-spec-desc">
+                                        <%- latestPick.description %>
+                                    </div>
+                                    <div class="sub-display-content-spec-list">
+                                        <ul>
+                                            <% for(let i = 0;i<4;i++){ 
+                                                if(!latestPick.articles[i]){ break ; }
+                                            %>
+                                            <li><a href="/article/<%= latestPick.articles[i].uuid %>.html"><%= latestPick.articles[i].title %></a></li>
+                                            <% } %>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <% } %>
+                        
+                        <div class="sub-display">
+                            <div class="sub-display-title" style="margin-bottom:0"><h3>热门文章</h3></div>
+                            <div class="sub-display-content">
+                                <div class="sub-display-content-spec">
+                                    <div class="sub-display-content-spec-list">
+                                        <ul>
+                                            <% hotList.result && hotList.result.forEach( (hot) => { %>
+                                            <li><a href="/article/<%= hot.uuid %>.html"><%= hot.title %></a></li>
+                                            <% } ) %>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+        
+        <div class="hidden">
+            <!-- for search spider -->
+            <% 
+                let page = [];
+                let count = data.count;
+                let last = Math.ceil( data.count / (data.limit || 10) );
+                let cur = (data.offset);
+
+                let range = [];
+
+                if(cur>=3){
+                    range.push(cur-3);
+                    range.push( (cur+2 > last) ? last : (cur+2) );
+                }else{
+                    range.push(0);
+                    range.push( (4 > last) ? last : (4) );
+                }
+
+                for(let i = range[0];i<range[1];i++){
+                    page.push(i+1);
+                }
+
+            %>
+
+            <% if(cur > 1){ %>
+            <% queryObj.p = cur-1; %>
+            <div id="prev" class="btn"><a href="/article?<%= querystring.stringify(queryObj) %>"><i class="lnr lnr-chevron-left"></i></a></div>
+            <% } %>
+
+            <% if(cur < last){ %>
+            <% queryObj.p = cur+1; %>
+            <div id="next" class="btn"><a href="/article?<%= querystring.stringify(queryObj) %>"><i class="lnr lnr-chevron-right"></i></a></div>
+            <% } %>
+
+            <div id="page">
+                <ul>
+                    <% if(cur>=4){ %>
+                        <% queryObj.p = 1; %>
+                        <li><a class="btn" href="/article?<%= querystring.stringify(queryObj) %>">
+                            <i class="lnr lnr-chevron-left"></i>
+                        </a></li>
+                    <% } %>
+
+                    <% page.forEach( (p) => { %>
+                        <% queryObj.p = p; %>
+                        <li <%= (p==cur) ? ' class=cur' : '' %> ><a class="btn" href="/article?<%= querystring.stringify(queryObj) %>"><%= p %></a></li>
+                    <% } ) %>
+                    <% queryObj.p = last; %>
+                    <li>...</li><li><a class="btn" href="/article?<%= querystring.stringify(queryObj) %>"><%= last %></a></li>
+                    <form action="/article?<%= querystring.stringify(queryObj) %>">
+                        <% for( let key in queryObj ){ %>
+                            <% if(key!='p'){ %>
+                            <input type="hidden" name="<%= key %>" value="<%= queryObj[key] %>" />
+                            <% } %>
+                        <% } %>
+                        <li><input type="text" name="p" placeholder="跳转至" /></li><li class="go"><input class="btn" type="submit" value="GO" /></li>
+                    </form>
+                </ul>
+            </div>
+        </div>
+        
+        <%- include footer %>
+        
+    </body>
+</html>

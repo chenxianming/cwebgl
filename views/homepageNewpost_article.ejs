@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<%- include head %>
+</head>
+    <body>
+        <%- include header %>
+        
+        <%- include user %>
+        
+        <div class="wrap">
+            <div class="homepage">
+                <div class="homepage-left w260">
+                    <div class="homepage-title">
+                        <i class="lnr lnr-user"></i><span>我的主页</span>
+                    </div>
+                    <%- include menu %>
+                </div>
+                <div class="content-edit fr w758 content-post" data-type="newArticle" data-target="newPost">
+                    <h2 class="homepage-container-title">发表文章</h2>
+                    <div class="homepage-container" style="margin-bottom:20px">
+                        <div class="homepage-container-line">
+                            <div class="pd20">
+                                <div class="homepage-container-line-title">标题<span class="orange">*</span></div>
+                                <div class="homepage-input edit-field-article-title">
+                                    <input data-value="title" type="text" placeholder="标题" />
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="homepage-container-line">
+                            <div class="pd20">
+                                <div class="homepage-container-line-title">栏目分类<span class="orange">*</span></div>
+                                <div class="homepage-container-line-selector" data-value="categories">
+                                    <ul>
+                                        <li><i class="btn homepage-container-sl"><b></b></i><span>WEBGL教程</span></li>
+                                        <li><i class="btn homepage-container-sl"><b></b></i><span>原创文章</span></li>
+                                        <li><i class="btn homepage-container-sl"><b></b></i><span>翻译文章</span></li>
+                                        <li><i class="btn homepage-container-sl"><b></b></i><span>WEBGL资讯</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!--
+                        <div class="homepage-container-line">
+                            <div class="pd20">
+                                <div class="homepage-container-line-title">所属分类</div>
+                                <div class="homepage-container-line-pick">
+                                    <div class="homepage-container-line-pick-selector">
+                                        <span class="homepage-container-line-pick-name">选择分栏</span>
+                                        <i class="lnr lnr-chevron-down"></i>
+                                        <div class="homepage-container-line-pick-selector-ul">
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="homepage-container-line-pick-selector-btn btn" data-type="edit">编辑该分栏</div>
+                                    <div class="homepage-container-line-pick-selector-btn btn" data-type="remove">删除该分栏</div>
+                                    <div id="newPick" class="homepage-container-line-pick-new orange btn">新建分栏</div>
+                                </div>
+                            </div>
+                        </div>
+                        -->
+                        
+                        <div class="homepage-container-line">
+                            <div class="pd20">
+                                <div class="homepage-container-line-title">版权信息</div>
+                                <div class="homepage-container-line-selector" data-type="multi">
+                                    <ul>
+                                        <li><i class="btn homepage-container-sl is-created"><b></b></i><span>原创</span></li>
+                                    </ul>
+                                </div>
+                                <div class="homepage-container-line-p">如果为转载，请注明出处</div>
+                                <div>
+                                    <div style="margin-right:10px;" class="homepage-input edit-field-article-form">
+                                        <input data-value="from" style="width:130px;" type="text" placeholder="来源" />
+                                    </div><div class="homepage-input edit-field-article-fromLink">
+                                        <input data-value="fromLink" style="width:470px;" type="text" placeholder="链接" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="homepage-container-line">
+                            <div class="pd20">
+                                <div class="homepage-container-line-title">匿名信息</div>
+                                <div class="homepage-container-line-selector" data-type="multi" data-value="anonymous">
+                                    <ul>
+                                        <li><i class="btn homepage-container-sl"><b></b></i><span>匿名发表</span></li>
+                                    </ul>
+                                </div>
+                                <div class="homepage-container-line-p" style="margin-bottom:0;">选择该选项，将不会显示作者信息</div>
+                            </div>
+                        </div>
+                        
+                        <div class="homepage-container-line">
+                            <div style="width:710px;border:none;margin-bottom:0" class="comment-reply-post post" data-usage="face,link,image,code,cloud,headline,bold,list,audio,video,attachment,paragraph" data-type="article" data-event="reply">
+                                <div class="post-title">
+                                </div>
+                                <div class="post-content">
+                                    <div class="pd20">
+                                        <div data-value="content" class="post-content-textarea" contenteditable="true"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="homepage-container-line">
+                            <div class="pd20">
+                                <div class="homepage-container-line-title">标签</div>
+                                <div class="homepage-container-line-p">对该内容添加标签，便于关键词搜索</div>
+                                <div>
+                                    <div class="tags" data-value="anonymous">
+                                        <ul></ul>
+                                    </div>
+                                    <div style="margin-right:10px;" class="homepage-input edit-field-article-form">
+                                        <input class="tag-input" type="text" placeholder="关键字" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="fr">
+                        <div class="post-content-submit btn">投稿</div>
+                    </div>
+                    <div class="clear"></div>
+                    
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+       
+        <script>
+            (window.global) || (window.global = {});
+            global['relationUUID'] = '<%- relationUUID %>';
+            global['relationUUID'] = global['relationUUID'].replace(/fanxiegang/g,'\\');
+        </script>
+        <%- include footer %>
+        
+    </body>
+</html>

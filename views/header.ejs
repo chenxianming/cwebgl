@@ -1,0 +1,167 @@
+<div id="header">
+    <div class="wrap">
+        <div class="fl">
+            <div id="logo">
+                <div class="table">
+                    <div class="cell">
+                        <a href="/"><img src="/assets/img/logo.png" /></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="fl">
+            <div id="navigator">
+                <div class="table">
+                    <div class="cell">
+                        <ul>
+                            <li<%= (typeof(position) != 'undefined' && position=='article') ? ' class=cur' : '' %>>
+                                <a class="navigator-li-main btn" href="/article">文章</a>
+                                <div class="navigator-li-sub">
+                                    <a class="btn" href="/article?c=原创文章">原创文章</a>
+                                    <a class="btn" href="/article?c=WEBGL资讯">WEBGL资讯</a>
+                                    <a class="btn" href="/article?c=翻译文章">翻译文章</a>
+                                    <a class="btn" href="/article?c=WEBGL教程">WEBGL教程</a>
+                                    <a class="btn" href="/pick">栏目专题</a>
+                                </div>
+                            </li><li<%= (typeof(position) != 'undefined' && position=='website') ? ' class=cur' : '' %>>
+                            <a class="navigator-li-main btn" href="/website">酷站</a>
+                            </li><li<%= (typeof(position) != 'undefined' && position=='code') ? ' class=cur' : '' %>>
+                            <a class="navigator-li-main btn" href="/code">代码</a>
+                            </li><li<%= (typeof(position) != 'undefined' && position=='community') ? ' class=cur' : '' %>>
+                            <a class="navigator-li-main btn" href="/community">热帖</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="fr">
+            <div id="search">
+                <div class="table">
+                    <div class="cell">
+                        <div class="search">
+                            <div class="table">
+                                <div class="cell">
+                                    <div class="search-input"><input placeholder="搜索您感兴趣的内容" type="text" /></div><div class="search-btn">
+                                        <div class="table">
+                                            <div class="cell"><i class="lnr lnr-magnifier"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="search-sli">
+                    <ul></ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="fr">
+            <div id="user">
+                <% if(userData){ %>
+                <div class="table">
+                    <div class="cell">
+                        <div class="user-infomation<%= (userData && userData.newMessage) ? ' newMsg' : '' %>">
+                            <div class="user-infomation-avatar">
+                                <a href="/user"><img src="<%= userData.avatar ? userData.avatar : '/assets/img/user-avatar-default.png' %>" alt=""></a>
+                            </div>
+                            <div class="user-infomation-nick">
+                                <%= userData.name %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="user-menu">
+                    <ul>
+                        <li><a class="btn" href="/user"> <i class="lnr lnr-home"></i> 我的主页</a></li>
+                        <li><a class="btn" href="/user/message"> <i class="lnr lnr-envelope"></i> 消息中心<%- (userData && userData.newMessage) ? `<span class=orange>( ${ userData.newMessage } )</span>` : '' %></a></li>
+                        <li><a class="btn" href="/user/collections"> <i class="lnr lnr-star"></i> 我的收藏</a></li>
+                        <li><a class="btn" href="/user/update"> <i class="lnr lnr-license"></i> 资料设置</a></li>
+                        <li><a class="btn" href="/user/logout"> <i class="lnr lnr-exit"></i> 退出登录</a></li>
+                    </ul>
+                </div>
+                <% }else{ %>
+                <div class="table">
+                    <div class="cell">
+                        <ul>
+                            <li class="reg-event"><a href="#">注册</a></li><li class="login-event"><a href="#">登录</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <% } %>
+            </div>
+        </div>
+
+        <% if(typeof(position) != 'undefined' && position=='article'){ %>
+        <div class="fr">
+            <div id="post-type">
+                <div class="table">
+                    <div class="cell">
+                        <div data-type="article" class="post-type btn">投稿</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% } %>
+
+        <% if(typeof(position) != 'undefined' && position=='website'){ %>
+        <div class="fr">
+            <div id="post-type">
+                <div class="table">
+                    <div class="cell">
+                        <div data-type="website" class="post-type btn">提交</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% } %>
+
+        <% if(typeof(position) != 'undefined' && position=='code'){ %>
+        <div class="fr">
+            <div id="post-type">
+                <div class="table">
+                    <div class="cell">
+                        <div data-type="website" class="post-type btn"><a href="/code/edit?init=true">新建</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% } %>
+
+        <% if(typeof(position) != 'undefined' && position=='community'){ %>
+        <div class="fr">
+            <div id="post-type">
+                <div class="table">
+                    <div class="cell">
+                        <div data-type="topic" class="post-type btn">发表</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% } %>
+
+        <% if(typeof(position) != 'undefined' && position=='user'){ %>
+        <div class="fr">
+            <div id="post-type" class="post-all">
+                <div class="table">
+                    <div class="cell">
+                        <div class="post-type btn">发表</div>
+                    </div>
+                </div>
+                <div class="post-all-ul">
+                    <ul>
+                        <li class="btn"><a href="/user/newpost?t=article">文章</a></li>
+                        <li class="btn"><a href="/user/newpost?t=website">酷站</a></li>
+                        <li class="btn"><a href="/code/edit?init=true">代码</a></li>
+                        <li class="btn"><a href="/user/newpost?t=topic">热帖</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <% } %>
+
+        <div class="clear"></div>
+    </div>
+</div>

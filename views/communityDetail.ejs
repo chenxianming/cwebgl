@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include head %>
+</head>
+    <body>
+        <%- include header %>
+        <link rel="stylesheet" href="/assets/img/codemirror.css">
+        <link rel="stylesheet" href="/assets/img/lucario.css">
+        <style>
+            .CodeMirror{ height:100%; }
+        </style>
+        <div id="forum" data-uuid="<%= detail.uuid %>">
+            <div class="wrap">
+
+                    <div class="fl">
+                        <div class="forum-content w690" style="margin-bottom:40px;">
+                            
+                            <div class="forum-content-title">
+                                <div class="fl">
+                                    <div class="table">
+                                        <div class="cell">
+                                            <div class="forum-content-title-tag <%= ( detail.type=='精华' ) ? ' l' : ''  %><%= ( detail.type=='置顶' ) ? ' b' : ''  %> "><%= detail.type %></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="fl">
+                                    <div class="table">
+                                        <div class="cell">
+                                            <div class="forum-content-title-text"><%= detail.title %></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="fr">
+                                    <div class="table">
+                                        <div class="cell">
+                                            <div class="forum-content-title-coll btn collect-event<%= isCollect ? ' isCollected' : '' %>" data-uuid="<%= detail.uuid %>" data-type="topic">
+                                                <i class="lnr lnr-star<%= isCollect ? '-empty' : '' %>"></i><span><%= isCollect ? '已收藏' : '收藏' %></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="fr">
+                                    <div class="table">
+                                        <div class="cell">
+                                            <div class="forum-content-title-infomation">
+                                                <span>浏览量:<%= detail.views %></span><span>回复:<%= data.count*1-1 %></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                            
+                            <% data.result.forEach( (reply) => { %>
+                            <div id="thread-<%= reply.index %>" class="forum-content-item" data-uuid="<%= reply.uuid %>">
+                                <div class="forum-content-item-t1">
+                                    <div class="fl">
+                                        
+                                        <div class="table">
+                                            <div class="cell">
+                                               
+                               
+                                                <% 
+                                                    let level = 0;
+
+                                                    (reply.userDetail.credit >= 5) && ( level=1 );
+                                                    (reply.userDetail.credit >= 20) && ( level=2 );
+                                                    (reply.userDetail.credit >= 50) && ( level=3 );
+                                                    (reply.userDetail.credit >= 100) && ( level=4 );
+                                                    (reply.userDetail.credit >= 300) && ( level=5 );
+                                                %>
+
+                                                <div class="user-infomation">
+                                                    <div class="user-infomation-avatar">
+                                                        <a href="/user/<%= reply.userDetail.uuid %>"><img src="<%= (reply.userDetail && reply.userDetail.avatar) ? reply.userDetail.avatar : '/assets/img/user-avatar-default.png' %>" /></a>
+                                                    </div>
+
+                                                    <div class="user-infomation-desc">
+                                                        <div class="user-infomation-name"><%= reply.userDetail.name %></div>
+                                                        <div class="user-infomation-level">
+                                                            Levl:<%= level %>
+                                                            <%- (level >= 3) ? '<span>Pro</span>' : '' %>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                                <p>
+                                                    <%= reply.postDate %>
+                                                </p>
+                                            </div>
+                                        </div>
+                                   
+                                    </div>
+                                    <div class="fr">
+                                        <div class="table">
+                                            <div class="cell">
+                                                <div class="forum-content-item-t1-floor" data-link="<%= reply.index %>" data-index="<%= (reply.index==0) ? '楼主' : (reply.index*1+1) %>">
+                                                    <span class="btn up-topic"><%= reply.up.length || 0 %></span><em>#<%= (reply.index==0) ? '楼主' : (reply.index*1+1) %></em>
+                                                </div>
+                                                <div class="forum-content-item-t1-action">
+                                                    <a href="#reply-id">回复</a>
+                                                    <a class="up-topic" href="#">赞成</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clear"></div>
+                                </div>
+                                
+                                <div class="forum-content-item-content">
+                                    <% if( reply.isEdit ){ %>
+                                    <div class="edit-thread">
+                                        <%- (reply.index!='0') ? '<a class="orange btn remove-thread" href="#">删除</a>' : '<a class="orange btn" href="/user/topic">到个人中心删除</a>' %><a class="orange" href="/user/editpost?t=thread&uuid=<%= reply.uuid %>">编辑</a>
+                                    </div>
+                                    <% } %>
+
+                                    <%- reply.content %>
+                                </div>
+                            </div>
+                            
+                            <% } ) %>
+
+                       
+                        </div>
+                        
+                        <div class="w690">
+                            <% 
+                                let page = [];
+                                let count = data.count;
+                                let last = Math.ceil( data.count / (data.limit || 10) );
+                                let cur = (data.offset);
+
+                                let range = [];
+
+                                if(cur>=3){
+                                    range.push(cur-3);
+                                    range.push( (cur+2 > last) ? last : (cur+2) );
+                                }else{
+                                    range.push(0);
+                                    range.push( (4 > last) ? last : (4) );
+                                }
+
+                                for(let i = range[0];i<range[1];i++){
+                                    page.push(i+1);
+                                }
+                            %>
+                            <div id="page">
+                                <ul>
+                                    <% if(cur>=4){ %>
+                                        <% queryObj.p = 1; %>
+                                        <li><a class="btn" href="/community/<%= detail.uuid %>.html?<%= querystring.stringify(queryObj) %>">
+                                            <i class="lnr lnr-chevron-left"></i>
+                                        </a></li>
+                                    <% } %>
+
+                                    <% page.forEach( (p) => { %>
+                                        <% queryObj.p = p; %>
+                                        <li <%= (p==cur) ? ' class=cur' : '' %> ><a class="btn" href="/community/<%= detail.uuid %>.html?<%= querystring.stringify(queryObj) %>"><%= p %></a></li>
+                                    <% } ) %>
+                                    <% queryObj.p = last; %>
+                                    <li>...</li><li><a class="btn" href="/community/<%= detail.uuid %>.html?<%= querystring.stringify(queryObj) %>"><%= last %></a></li>
+                                    <form action="/community/<%= detail.uuid %>.html?<%= querystring.stringify(queryObj) %>">
+                                        <% for( let key in queryObj ){ %>
+                                            <% if(key!='p'){ %>
+                                            <input type="hidden" name="<%= key %>" value="<%= queryObj[key] %>" />
+                                            <% } %>
+                                        <% } %>
+                                        <li><input type="text" name="p" placeholder="跳转至" /></li><li class="go"><input class="btn" type="submit" value="GO" /></li>
+                                    </form>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="690">
+                            <div id="reply-id" class="topic-reply content-post" data-type="newReply" data-event="newReplay" data-target="<%= detail.uuid %>">
+                                <div class="comment-reply-post post" data-usage="face,link,image,code,cloud" data-type="replay" data-event="reply">
+                                    <div class="post-title">
+                                    </div>
+                                    <div class="post-content">
+                                        <div class="pd20">
+                                            <div class="post-content-textarea" contenteditable="true"></div>
+                                        </div>
+                                    </div>
+                                    <% if(!userData){ %>
+                                    <div class="comment-reply-post-nologin">
+                                        <span style="color:rgba(0,0,0,.4)">请先<b class="login-event orange btn" style="margin:0 5px;">登录</b>后再发表评论</span>
+                                    </div>
+                                    <% } %>
+                                </div>
+
+                                <div class="fr">
+                                    <div class="post-content-submit btn">发表评论</div>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="fr">
+                        <div class="forum-sub w310">
+                          
+                            <div class="sub-display">
+                                <div class="sub-display-title" style="margin-bottom:10px"><h3>论坛信息</h3></div>
+                                <div class="sub-display-content">
+                                    <div class="forum-infomation">
+                                        <p>今日发表：<%= data.today || 0 %></p>
+                                        <p>昨日发表：<%= data.yestoday || 0 %></p>
+                                        <p>主题：<%= data.topicCount %></p>
+                                        <p>回复：<%= data.threadCount %></p>
+                                    </div>
+                                </div>
+                            </div>
+                           
+                            <div class="sub-display">
+                                <div class="sub-display-title" style="margin-bottom:0"><h3>论坛热帖</h3></div>
+                                <div class="sub-display-content">
+                                    <div class="sub-display-content-spec">
+                                        <div class="sub-display-content-spec-list">
+                                            <ul>
+                                                <% hotList.result.forEach( (item) => { %>
+                                                <li><a href="/community/<%= item.uuid %>.html"><%= item.title %></a></li>
+                                                <% } ) %>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+            </div>
+        </div>
+        
+        <script src="/js/codemirror.js"></script>
+        <script src="/js/editor/javascript.js"></script>
+        <%- include footer %>
+        
+    </body>
+</html>

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include head %>
+</head>
+    <body>
+        <%- include header %>
+        
+        <div id="banner">
+            <div class="banner-img" style="background:url(<%= showcase.bgpic %>) no-repeat 50% 50%;background-size:cover;"></div>
+            <div class="banner-description">
+                <div class="wrap">
+                    <div class="fl">
+                        <div class="banner-description-left">
+                            <div class="table">
+                                <div class="cell">
+                                    <a href="/website/<%= showcase.uuid %>.html">
+                                        <h3><%= showcase.title %></h3>
+                                        <p><%- showcase.description %></p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fr">
+                        <div class="banner-description-right">
+                            <div class="table">
+                                <div class="cell">
+                                    <div class="banner-description-right-l1">
+                                        <div class="banner-description-right-l1-item">
+                                            <i class="lnr-star lnr"></i>
+                                            <span><%= showcase.collect %></span>
+                                        </div>
+                                        <div class="banner-description-right-l1-item">
+                                            <i class="lnr-bubble lnr"></i>
+                                            <span><%= showcase.comment %></span>
+                                        </div>
+                                    </div>
+                                    <div class="banner-description-right-l2">
+                                        <a target="_blank" class="website-view" data-uuid="<%= showcase.uuid %>" href="http://<%= showcase.link %>">
+                                            <i class="lnr-link lnr"></i><span>访问网站</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="filter">
+            <div class="wrap">
+                <div class="fl">
+                    <div class="filter-i">
+                        <i class="lnr-funnel lnr"></i>
+                    </div>
+                    <div class="filter-s">
+                        <span>语言<%- ( data.option && data.option.language ) ? `<b>${ data.option.language }</b>` : '' %></span><i class="lnr-chevron-down lnr"></i>
+                        
+                        <div class="filter-s-down" style="width:360px;">
+                            <% 
+                                let langs = [
+                                    '英文',
+                                    '韩文',
+                                    '日文',
+                                    '中文',
+                                    '其他',
+                                ];
+                            %>
+                            <ul>
+                                <% let lTemp2; %>
+                                <% langs.forEach( (lang) => { %><% lTemp2 = Object.assign({},queryObj); lTemp2.p=1;lTemp2.l=lang; %><li><a class="btn" href="/website?<%= querystring.stringify(lTemp2) %>"><%= lang %></a></li><% } ) %>
+                                <div class="clear"></div>
+                            </ul>
+                        </div>
+                   
+                    </div><div class="filter-s">
+                        <span>分类<%- ( data.option && data.option.categories ) ? `<b>${ data.option.categories }</b>` : '' %></span><i class="lnr-chevron-down lnr"></i>
+                        <div class="filter-s-down">
+                            <% 
+                                let cates = [
+                                    '活动页面',
+                                    '探索体验',
+                                    '交互设计',
+                                    '设计机构',
+                                    '文化艺术',
+                                    '个性展示',
+                                    '音乐网站',
+                                    '产品网站',
+                                    '电子商务',
+                                    '影视娱乐',
+                                    '网页游戏',
+                                    '摄影摄像',
+                                    '体育运动',
+                                    '教育行业',
+                                    '科学技术'
+                                ];
+                            %>
+                            <ul>
+                                <% let cTemp2; %>
+                                <% cates.forEach( (cate) => { %><% cTemp2 = Object.assign({},queryObj); cTemp2.p=1;cTemp2.c=cate; %><li><a class="btn" href="/website?<%= querystring.stringify(cTemp2) %>"><%= cate %></a></li><% } ) %>
+                                <div class="clear"></div>
+                            </ul>
+                        </div>
+                    </div><div class="filter-s open-colorPlane">
+                        <span>颜色<%- ( data.option && data.option.color ) ? `<b style="background:${ data.option.color };${ data.option.color=='#ffffff' ? 'border:1px solid #e9edef' : '' }" class="display-color"></b>` : '' %></span><i class="lnr-chevron-down lnr"></i>
+                    </div>
+                    
+                    <%
+                        let isClearFilter = false;
+                        let clearFilterObj = {};
+                        for(let key in queryObj){
+                            if(key!='p' && key != 'sort'){
+                                isClearFilter = true;
+                            }else{
+                                clearFilterObj[key] = queryObj[key];
+                            }
+
+                        }
+                    %>
+                    
+                    <% if(isClearFilter){ %>
+                    <div class="filter-clear btn">
+                        <a href="/website?<%= querystring.stringify(clearFilterObj) %>">
+                            <i class="lnr-cross lnr"></i><span>清除条件</span>
+                        </a>
+                    </div>
+                    <% } %>
+                </div>
+                
+                <div class="fr">
+                    <div id="sort">
+                        <div class="table">
+                            <div class="cell">
+                               
+                                <% let temp = Object.assign({},queryObj); %>
+                                <% temp.sort='postDate-'+( (data.sort && data.sort.postDate) >0 ? 0 : 1) %>
+                                <a href="/website?<%= querystring.stringify(temp) %>" class="btn sort-i<%= ( data.sort.hasOwnProperty('postDate') ) ? ' active' : '' %>">
+                                    <span>时间</span><i class="lnr-arrow-<%= data.sort.postDate>0 ? 'down' : 'up' %> lnr"></i>
+                                </a>
+                                
+                                
+                                <% let vTemp = Object.assign({},queryObj); %>
+                                <% vTemp.sort='views-'+( (data.sort && data.sort.views) >0 ? 0 : 1) %>
+                                <a href="/website?<%= querystring.stringify(vTemp) %>" class="btn sort-i<%= ( data.sort.hasOwnProperty('views') ) ? ' active' : '' %>">
+                                    <span>热门</span><i class="lnr-arrow-<%= data.sort.views>0 ? 'down' : 'up' %> lnr"></i>
+                                </a>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+        
+        <div id="websitelist">
+            <div class="wrap">
+                <div class="websitelist-list">
+                    
+                    <% data.result.forEach( (d,idx) => { %>
+                    
+                    <div class="websitelist-item" data-item="<%= d.uuid %>">
+                        <div class="websitelist-item-img">
+                            <img src="<%= d.litpic %>" />
+                            <div class="websitelist-item-img-active">
+                                <div class="websitelist-item-img-active-collection btn collect-event<%= d.collected ? ' isCollected' : '' %>" data-uuid="<%= d.uuid %>" data-type="website">
+                                    <a href="#"><i class="lnr lnr-star<%= d.collected ? '-empty' : '' %>"></i><span><%= d.collected ? '已收藏' : '收藏' %></span></a>
+                                </div>
+                                <div class="websitelist-item-img-active-link btn">
+                                    <a class="website-view" data-uuid="<%= d.uuid %>" title="直接访问" target="_blank" href="http://<%= d.link %>"><i class="lnr-link lnr"></i></a>
+                                </div>
+                                <div class="view-detail btn">
+                                    <a href="/website/<%= d.uuid %>.html" title="查看该网站">
+                                        <i class="lnr-select lnr"></i><span>查看该网站</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="websitelist-item-title btn"><a title="查看该网站" href="/website/<%= d.uuid %>.html"><%= d.title %></a></div>
+                        <div class="websitelist-item-description">
+                            <div class="websitelist-item-description-item">
+                                <i class="lnr-star lnr"></i><span><%= d.collection %></span>
+                            </div><div class="websitelist-item-description-item">
+                                <i class="lnr-bubble lnr"></i><span><%= d.comment %></span>
+                            </div><div class="websitelist-item-description-item">
+                                <i class="lnr-history lnr"></i><span><%= d.postDate %></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <% } );  %>
+                    
+                    <div class="clear"></div>
+                </div>
+                
+                <% 
+                    let page = [];
+                    let count = data.count;
+                    let last = Math.ceil( data.count / data.limit );
+                    let cur = (data.offset);
+                    
+                    let range = [];
+                
+                    if(cur>=3){
+                        range.push(cur-3);
+                        range.push( (cur+2 > last) ? last : (cur+2) );
+                    }else{
+                        range.push(0);
+                        range.push( (4 > last) ? last : (4) );
+                    }
+                
+                    for(let i = range[0];i<range[1];i++){
+                        page.push(i+1);
+                    }
+                    
+                %>
+                
+                <% if(cur > 1){ %>
+                <% queryObj.p = cur-1; %>
+                <div id="prev" class="btn"><a href="/website?<%= querystring.stringify(queryObj) %>"><i class="lnr lnr-chevron-left"></i></a></div>
+                <% } %>
+                
+                <% if(cur < last){ %>
+                <% queryObj.p = cur+1; %>
+                <div id="next" class="btn"><a href="/website?<%= querystring.stringify(queryObj) %>"><i class="lnr lnr-chevron-right"></i></a></div>
+                <% } %>
+                
+                <div id="page">
+                    <ul>
+                        <% if(cur>=4){ %>
+                            <% queryObj.p = 1; %>
+                            <li><a class="btn" href="/website?<%= querystring.stringify(queryObj) %>">
+                                <i class="lnr lnr-chevron-left"></i>
+                            </a></li>
+                        <% } %>
+                        
+                        <% page.forEach( (p) => { %>
+                            <% queryObj.p = p; %>
+                            <li <%= (p==cur) ? ' class=cur' : '' %> ><a class="btn" href="/website?<%= querystring.stringify(queryObj) %>"><%= p %></a></li>
+                        <% } ) %>
+                        <% queryObj.p = last; %>
+                        <li>...</li><li><a class="btn" href="/website?<%= querystring.stringify(queryObj) %>"><%= last %></a></li>
+                        <form action="/website?<%= querystring.stringify(queryObj) %>">
+                            <% for( let key in queryObj ){ %>
+                                <% if(key!='p'){ %>
+                                <input type="hidden" name="<%= key %>" value="<%= queryObj[key] %>" />
+                                <% } %>
+                            <% } %>
+                            <li><input type="text" name="p" placeholder="跳转至" /></li><li class="go"><input class="btn" type="submit" value="GO" /></li>
+                        </form>
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+        
+        <div id="colorSelector">
+            <div id="colorPlane">
+                <% let cTemp; %>
+                <% colorPlane.forEach( (item) => { %><div class="colorPlane-item"><% cTemp = Object.assign({},queryObj);cTemp.color=item;cTemp.p=1; %><a title="<%= item %>" href="/website?<%= querystring.stringify(cTemp) %>"><b class="btn cur" style="background:<%= item %>"></b></a></div><% } ) %>
+            </div>
+        </div>
+        
+        <%- include footer %>
+        
+    </body>
+</html>

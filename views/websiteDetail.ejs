@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include head %>
+</head>
+
+<body>
+    <%- include header %>
+
+    <div id="banner" style="margin-bottom:30px;">
+        <div class="banner-img" style="background:url(<%= data.bgpic %>) no-repeat 50% 50%;background-size:cover;"></div>
+        <div class="banner-description">
+            <div class="wrap">
+                <div class="fr">
+                    <div class="banner-description-right">
+                        <div class="table">
+                            <div class="cell">
+                                <div class="banner-description-right-l1">
+                                    <div class="banner-description-right-l1-item">
+                                        <i class="lnr-star lnr"></i>
+                                        <span>
+                                            <%= data.collection.length %></span>
+                                    </div>
+                                    <div class="banner-description-right-l1-item">
+                                        <i class="lnr-bubble lnr"></i>
+                                        <span>
+                                            <%= data.comment %></span>
+                                    </div>
+                                </div>
+                                <div class="banner-description-right-l2 btn">
+                                    <a class="website-view" data-uuid="<%= data.uuid %>" target="_blank" href="http://<%= data.link %>">
+                                        <i class="lnr-link lnr"></i><span>访问网站</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+
+    <% prevNext.forEach( (e) => { %>
+    <% if(e.idx=='next'){ %>
+    <div id="next" class="btn"><a href="/website/<%= e.uuid %>.html"><i class="lnr lnr-chevron-right"></i></a></div>
+    <% }else{ %>
+    <div id="prev" class="btn"><a href="/website/<%= e.uuid %>.html"><i class="lnr lnr-chevron-left"></i></a></div>
+    <% } %>
+    <% } ) %>
+
+    <div id="website-content">
+        <div class="wrap">
+            <div class="fl">
+                <div class="website-content-basic">
+                    <h2><%= data.title %></h2>
+                    <div class="website-content-basic-desc">
+                        <p><%- data.description %></p>
+                    </div>
+                    <div class="website-content-basic-analyze">
+                        <p><%- data.postDescription %></p>
+                    </div>
+                    <div class="website-content-basic-tags">
+                        <ul>
+                            <% data.tags && data.tags.forEach( (tag) => { %>
+                            <li><a href="/search?k=<%= tag %>"><%= tag %></a></li>
+                            <% } ) %>
+                        </ul>
+                    </div>
+                    <div class="website-content-basic-collection">
+                        <h3>当前共有
+                            <%= data.collection.length %> 位用户收藏该网站</h3>
+                        <ul>
+                            <% data.collection.forEach( (usr) => { %>
+                            <li><a title="<%= usr.name %>" href="/user/<%= usr.uuid %>"><img src="<%= usr.avatar || '/assets/img/user-avatar-default.png?'+Math.random() %>" /></a></li>
+                            <% } ) %>
+                            <li class="add-collection btn collect-event<%= isCollect ? ' isCollected' : '' %>" data-uuid="<%= data.uuid %>" data-type="website"><a href="#">
+                                    <div class="table">
+                                        <div class="cell">
+                                            <i class="lnr lnr-star<%= isCollect ? '-empty' : '' %>"></i><span>
+                                                <%= isCollect ? '已收藏' : '加入收藏' %></span>
+                                        </div>
+                                    </div>
+                                </a></li>
+                            <div class="clear"></div>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="fr">
+                <div class="website-content-infomation">
+                    <div class="pd20">
+                        <div class="website-content-infomation-item">
+                            <h3>语言</h3>
+                            <div class="website-content-infomation-item-ct">
+                                <% data.language && data.language.forEach( (lan) => {
+                                    %><span><a title="<%= lan %>" href="/website?l=<%= encodeURIComponent(lan) %>"><%= lan %></a></span><%} ) %>
+                            </div>
+                        </div>
+                        <div class="website-content-infomation-item">
+                            <h3>分类</h3>
+                            <div class="website-content-infomation-item-ct">
+                                <% data.categories && data.categories.forEach( (ca) => {
+                                    %><span><a title="<%= ca %>" href="/website?c=<%= encodeURIComponent(ca) %>"><%= ca %></a></span><% } ) %>
+                            </div>
+                        </div>
+                        <div class="website-content-infomation-item">
+                            <h3>颜色</h3>
+                            <div class="website-content-infomation-item-ct">
+                                <div class="color-bar">
+                                    <% data.color && data.color.forEach( (co) => {
+                                    %>
+                                    <div class="color-bar-item">
+                                        <a style="border-color:<%= co %>;background:<%= co %>" title="<%= co %>" href="/website?color=<%= encodeURIComponent(co) %>">
+                                            <div class="b"></div>
+                                        </a>
+                                    </div>
+                                    <%
+                                    } ) %>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="website-content-infomation-item display-qr">
+                            <h3>平台</h3>
+                            <div class="website-content-infomation-item-ct">
+                                <% data.platform && data.platform.forEach( (pf) => {
+                                    %>
+                                <% switch(pf){
+                                            case 'pc' :
+                                            { %>
+                                <div class="website-content-infomation-item-ct-device" title="电脑">
+                                    <i class="lnr-laptop lnr"></i>
+                                </div>
+                                <% }
+                                            break ;
+                                            
+                                            case 'pad' :
+                                            { %>
+                                <div class="website-content-infomation-item-ct-device" title="平板">
+                                    <i class="lnr-tablet lnr"></i>
+                                </div>
+                                <% }
+                                            break ;
+                                            
+                                            case 'phone' :
+                                             { %>
+                                <div class="website-content-infomation-item-ct-device" title="手机">
+                                    <i class="lnr-smartphone lnr"></i>
+                                </div>
+                                <% }
+                                            break ;
+                                                     
+                                            } 
+                                        %>
+                                <%
+                                    } ); %>
+                            </div>
+                            <% if( typeof(qrCode) != 'undefined' ){ %>
+                            <div class="website-qrcode">
+                                <%- qrCode %>
+                            </div>
+                            <% } %>
+                        </div>
+                        <div class="website-content-infomation-item">
+                            <h3>收录日期</h3>
+                            <div class="website-content-infomation-item-ct">
+                                <%= data.postDate %>
+                            </div>
+                        </div>
+                        <div class="website-content-infomation-item">
+                            <h3>访问次数</h3>
+                            <div class="website-content-infomation-item-ct">
+                                <%= data.views %>
+                            </div>
+                        </div>
+                        <div class="visit-site btn">
+                            <a class="website-view" data-uuid="<%= data.uuid %>" target="_blank" href="http://<%= data.link %>">
+                                <div class="table">
+                                    <div class="cell">
+                                        <i class="lnr-link lnr"></i><span>访问网站</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clear"></div>
+
+            <% data.previewList && data.previewList.forEach( (shot) => { %>
+            <div class="screenshot">
+                <img src="<%= shot %>" />
+            </div>
+            <% } ) %>
+
+            <div class="website-rela">
+                <h3>相关酷站</h3>
+                <ul>
+                    <% for(let i = 0;i<Math.min(relation.length,3);i++){ %><li><img src="<%= relation[i].litpic %>" />
+                        <div class="website-rela-desc">
+                            <div class="table">
+                                <div class="cell">
+                                    <a href="/website/<%= relation[i].uuid %>.html">
+                                        <%= relation[i].title %></a>
+                                </div>
+                            </div>
+                            <div class="website-rela-desc-link btn"><a style="width:auto;" target="_blank" href="http://<%= relation[i].link %>">
+                                    <i class="lnr lnr-link"></i>
+                                </a></div>
+                        </div>
+                    </li><% } %>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="comments" data-page="1" data-type="website">
+        <div class="wrap">
+
+            <div class="list-more load-comment btn">
+                <i class="lnr lnr-redo"></i><span>加载更多评论</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="comment-reply" data-type="comments" data-target="<%= data.uuid %>">
+        <div class="wrap">
+            <div class="fl">
+                <div class="comment-reply-user login-event">
+                    <a href="#comments"><img src="<%= userData ? (userData.avatar ? userData.avatar : '/assets/img/avatar_default.png' ) : '/assets/img/avatar_default.png' %>" /></a>
+                    <h3>
+                        <%= userData ? userData.name : '游客' %>
+                    </h3>
+                </div>
+            </div>
+            <div class="fr">
+                <div class="comment-reply-post post" data-usage="face,link,image" data-type="website" data-event="reply">
+                    <div class="post-title">
+                    </div>
+                    <div class="post-content">
+                        <div class="pd20">
+                            <div class="post-content-textarea" contenteditable="true"></div>
+                        </div>
+                    </div>
+                    <% if(!userData){ %>
+                    <div class="comment-reply-post-nologin">
+                        <span style="color:rgba(0,0,0,.4)">请先<b class="login-event orange btn" style="margin:0 5px;">登录</b>后再发表评论</span>
+                    </div>
+                    <% } %>
+                </div>
+            </div>
+            <div class="clear"></div>
+            <div class="fr">
+                <div class="post-content-submit btn">发表评论</div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+
+    <%- include footer %>
+
+</body>
+
+</html>

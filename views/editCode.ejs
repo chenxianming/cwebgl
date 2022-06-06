@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include head %>
+</head>
+    <body>
+        <%- include header %>
+        <link rel="stylesheet" href="/assets/img/codemirror.css">
+        <link rel="stylesheet" href="/assets/img/dialog.css">
+        <link rel="stylesheet" href="/assets/img/matchesonscrollbar.css">
+        <link rel="stylesheet" href="/assets/img/lucario.css">
+        <style>
+            html,body{ width:100%; height:100%; overflow:hidden; }
+            .CodeMirror{ height:100%; }
+        </style>
+        <div id="code">
+            <div class="code-panel">
+                <div class="wrap">
+                    <div class="fl">
+                        <div class="code-panel-title"><%- data.status=='normal' ? '' : ' <span class="orange">(正在审核)</span>' %><%= data.title %></div>
+                    </div>
+                    <div class="fl">
+                        <div class="table">
+                            <div class="cell">
+                                <div class="user-infomation">
+                                    <div class="user-infomation-avatar">
+                                        <a href="/user/<%= userDetail.uuid %>"><img src="<%= userDetail.avatar || '/assets/img/user-avatar-default.png' %>"></a>
+                                    </div>
+                                    <div class="user-infomation-desc">
+                                        <div class="user-infomation-name"><a href="/user/<%= userDetail.uuid %>"><%= userDetail.name %></a></div>
+                                        <div class="user-infomation-postdate"><%= data.postDate %></div>
+                                    </div>
+                                    <!--
+                                    <div class="article-content-desc-item-tips">
+                                        <p>
+                                            tips:所有用户可通过积分提升等级<br />
+                                            <span>levl1</span> 为5积分<br />
+                                            <span>levl2</span> 为20积分<br />
+                                            <span>levl3</span> 为50积分<br />
+                                            <span>levl4</span> 为100积分<br />
+                                            <span>levl5</span> 为300积分<br />
+                                            超过 <span>levl3</span> 即可升级为专业用户<br />
+                                        </p>
+                                        <a href="#">
+                                            <i class="lnr lnr-link"></i><em>CWEBGL积分获得法则</em>
+                                        </a>
+                                    </div>
+                                    -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% if(isEditor){ %>
+                    <div class="fr">
+                        <div class="table">
+                            <div class="cell">
+                                <div class="code-setup btn">
+                                    <div class="table">
+                                        <div class="cell">
+                                            <i class="lnr lnr-cog"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% } %>
+                    <div class="fr">
+                        <div class="table">
+                            <div class="cell">
+                                <div class="code-config btn">
+                                    <div class="table">
+                                        <div class="cell">
+                                            <i class="lnr lnr-license"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fr">
+                        <div class="table">
+                            <div class="cell">
+                                <div class="code-fork btn" data-uuid="<%= data.uuid %>">
+                                    <div class="table">
+                                        <div class="cell">
+                                            <i class="lnr lnr-crop"></i><span>FORK</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fr">
+                        <div class="table">
+                            <div class="cell">
+                                <div class="code-coll btn collect-event<%= isCollect ? ' isCollected' : '' %>" data-uuid="<%= data.uuid %>" data-type="code">
+                                    <div class="table">
+                                        <div class="cell">
+                                            <i class="lnr lnr-star<%= isCollect ? '-empty' : '' %>"></i><span><%= isCollect ? '已收藏' : '收藏' %></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="clear"></div>
+                </div>
+            </div>
+            
+            <div class="code-area">
+                <div class="code-area-edit">
+                    <div class="code-area-edit-html">
+                        <div class="code-area-edit-html-container">
+                            <textarea style="display:none" id=code-area-edit-html-editor><%- htmlCode || '' %></textarea>
+                        </div>
+                        <div class="code-area-edit-html-grab">
+                            <div class="code-area-edit-html-title">HTML代码</div>
+                        </div>
+                        <div class="code-refresh btn">
+                            <i class="lnr lnr-redo"></i>
+                        </div>
+                    </div><div class="code-area-edit-js">
+                        <div class="code-area-edit-js-container">
+                            <textarea style="display:none" id=code-area-edit-js-editor><%- jsCode || '' %></textarea>
+                        </div>
+                        <div class="code-area-edit-js-grab">
+                            <div class="code-area-edit-js-title">JS代码</div>
+                        </div>
+                        <div class="code-refresh btn">
+                            <i class="lnr lnr-redo"></i>
+                        </div>
+                    </div>
+                    <div class="code-area-edit-grab"></div>
+                </div>
+                <div class="code-area-display">
+                    <iframe scrolling="no" src="/code/preview" width="100%" height="100%" frameborder="0"></iframe>
+                    <div class="code-action"><div class="code-action-icon open-vrcode">
+                            
+                        </div><div class="code-action-icon open-qrcode">
+                            <i class="lnr lnr-laptop-phone"></i>
+                        </div><div class="code-action-icon share-code">
+                            <i class="lnr lnr-code"></i>
+                        </div><div class="code-action-icon btn setfull" title="全屏">
+                            <i class="lnr lnr-frame-expand"></i>
+                        </div>
+                    </div>
+                    
+                    <div id="share-code" class="preview-mode">
+                        <p style="margin-top:15px;">复制嵌入代码</p>
+                        <input type="text" value='<iframe scrolling="no" src="https://www.cwebgl.com/code/<%= data.uuid %>?f=1&share=1" width="100%" height="100%" frameborder="0"></iframe>' title="复制嵌入代码" />
+                        <p>复制链接</p>
+                        <input type="text" value='https://www.cwebgl.com/code/<%= data.uuid %>?f=1&share=1' title="复制链接" />
+                    </div>
+                    
+                    <div id="qr-code" class="preview-mode">
+                        <div class="svg"><%- shareSvg %></div>
+                        <p>扫码至移动设备运行</p>
+                    </div>
+                    
+                    <div id="vr-code" class="preview-mode">
+                        <div class="svg"><%- vrSvg %></div>
+                        <p>扫码至移动设备运行</p>
+                    </div>
+                    
+                    <div class="console btn">Console</div>
+                    <div class="after"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="code-setup" class="code-alert" data-uuid="<%= data.uuid %>">
+            <div class="code-alert-close btn">
+                <i class="lnr lnr-cross"></i>
+            </div>
+            <div class="table">
+                <div class="cell" style="padding:30px 0;">
+                    <div class="code-setup-bg"></div>
+                    <div class="code-setup-container">
+                        <div class="pd30">
+                            <div class="code-setup-container-title">
+                                <input type="text" placeholder="标题" value="<%= data.title %>" />
+                            </div>
+                            <div class="code-setup-container-description">
+                                <textarea placeholder="描述"><%= data.description %></textarea>
+                            </div>
+                            <div class="code-setup-container-dependencies">
+                                <div class="code-setup-container-dependencies-title">依赖文件</div>
+                                <ul data-default="<%= data.dependencies.join(',') %>"></ul>
+                            </div>
+                            <div class="fr">
+                                <div class="code-setup-container-dependencies-new btn">
+                                    <i class="lnr lnr-plus-circle"></i><span>添加</span>
+                                </div>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="code-setup-action">
+                            <% if(data.forkFrom){ %><div class="code-setup-action-btn recover-code btn">还原</div><% } %><div class="code-setup-action-btn save-code btn">保存</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+          
+        <div id="code-infomation" class="code-alert">
+            <div class="code-alert-close btn">
+                <i class="lnr lnr-cross"></i>
+            </div>
+            <div class="table">
+                <div class="cell" style="padding:30px 0;">
+                    <div class="code-setup-bg"></div>
+                    <div class="wrap">
+                        <div class="fl w690">
+
+                            <div id="comments" data-page="1" data-type="code" style="padding:0 20px;">
+                                <div class="list-more load-comment btn">
+                                    <i class="lnr lnr-redo"></i><span>加载更多评论</span>
+                                </div>
+                            </div>
+
+                            <div class="content-post" style="margin-bottom:40px" id="comment-reply" data-type="comments" data-target="<%= data.uuid %>">
+                                <div class="comment-reply-post post" data-usage="face,link,image" data-type="code" data-event="reply" style="width: 645px;margin:0 auto;margin-bottom:20px;">
+                                    <div class="post-title">
+                                    </div>
+                                    <div class="post-content">
+                                        <div class="pd20">
+                                            <div class="post-content-textarea" contenteditable="true"></div>
+                                        </div>
+                                    </div>
+                                    <% if(!userData){ %>
+                                    <div class="comment-reply-post-nologin">
+                                        <span style="color:rgba(0,0,0,.4)">请先<b class="login-event orange btn" style="margin:0 5px;">登录</b>后再发表评论</span>
+                                    </div>
+                                    <% } %>
+                                </div>
+                                <div class="clear"></div>
+                                <div class="fr" style="margin-right:20px;">
+                                    <div class="post-content-submit btn">发表评论</div>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                       
+                        </div>
+                        
+                        
+                        <div class="code-showcase-infomation fr w310" style="background:#fff;border:none">
+                            <div class="pd20">
+                                <% 
+                                    let level = 0;
+
+                                    (userDetail.credit >= 5) && ( level=1 );
+                                    (userDetail.credit >= 20) && ( level=2 );
+                                    (userDetail.credit >= 50) && ( level=3 );
+                                    (userDetail.credit >= 100) && ( level=4 );
+                                    (userDetail.credit >= 300) && ( level=5 );
+                                %>
+                                
+                                <div class="user-infomation-title">
+                                    <div class="user-infomation">
+                                        <div class="user-infomation-avatar">
+                                            <a href="#"><img src="<%= userDetail.avatar || '/assets/img/user-avatar-default.png' %>" /></a>
+                                        </div>
+                                        <div class="user-infomation-desc">
+                                            <div class="user-infomation-name"><%= userDetail.name %></div>
+                                            <div class="user-infomation-level">
+                                                Levl:<%= level %>
+                                                <%- (level >= 3) ? '<span>Pro</span>' : '' %>
+                                            </div>
+                                        </div>
+                                        <!--
+                                        <div class="article-content-desc-item-tips">
+                                            <p>
+                                                tips:所有用户可通过积分提升等级<br />
+                                                <span>levl1</span> 为5积分<br />
+                                                <span>levl2</span> 为20积分<br />
+                                                <span>levl3</span> 为50积分<br />
+                                                <span>levl4</span> 为100积分<br />
+                                                <span>levl5</span> 为300积分<br />
+                                                超过 <span>levl3</span> 即可升级为专业用户<br />
+                                            </p>
+                                            <a href="#">
+                                                <i class="lnr lnr-link"></i><em>CWEBGL积分获得法则</em>
+                                            </a>
+                                        </div>
+                                        -->
+                                    </div>
+                                </div>
+                                <div class="code-detail-infomation-date">
+                                    <i class="lnr lnr-history"></i><span><%= data.postDate %></span>
+                                </div>
+                                <div class="user-infomation-field">
+                                    <div class="user-infomation-field-item">
+                                        <i class="lnr lnr-star"></i><span><%= data.collect %></span>
+                                    </div>
+                                    <div class="user-infomation-field-item">
+                                        <i class="lnr lnr-eye"></i><span><%= data.views %></span>
+                                    </div>
+                                    <div class="user-infomation-field-item">
+                                        <i class="lnr lnr-bubble"></i><span><%= data.comment %></span>
+                                    </div>
+                                    <div class="user-infomation-field-item">
+                                        <i class="lnr lnr-crop"></i><span><%= data.forked %></span>
+                                    </div>
+                                </div>
+                                <div class="user-infomation-description">
+                                    <%- data.description %>
+                                </div>
+                                
+                                <div class="user-infomation-collection btn collect-event<%= isCollect ? ' isCollected' : '' %>" data-uuid="<%= data.uuid %>" data-type="code">
+                                    <a href="#"><i class="lnr lnr-star<%= isCollect ? '-empty' : '' %>"></i><span><%= isCollect ? '已收藏' : '收藏' %></span></a>
+                                </div>
+                                
+                                <div class="user-infomation-fork btn" data-uuid="<%= data.uuid %>">
+                                    <a href="#"><i class="lnr lnr-crop"></i><span>FOKR</span></a>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+           
+        <script src="/js/codemirror.js"></script>
+        <script src="/js/editor/xml.js"></script>
+        <script src="/js/editor/javascript.js"></script>
+        <script src="/js/editor/dialog.js"></script>
+        <script src="/js/editor/searchcursor.js"></script>
+        <script src="/js/editor/search.js"></script>
+        <script src="/js/editor/annotatescrollbar.js"></script>
+        <script src="/js/editor/matchesonscrollbar.js"></script>
+        <script src="/js/editor/jump-to-line.js"></script>
+        <script>
+            var htmlContainer = document.getElementById('code-area-edit-html-editor'),
+                jsContainer = document.getElementById('code-area-edit-js-editor');
+                
+            var htmlEditor = CodeMirror.fromTextArea(htmlContainer, {
+                lineNumbers: true,
+                theme:'lucario',
+                mode:"text/html",
+                extraKeys: {"Alt-F": "findPersistent"}
+            }),jsEditor = CodeMirror.fromTextArea(jsContainer, {
+                lineNumbers: true,
+                theme:'lucario',
+                mode:"javascript",
+                extraKeys: {"Alt-F": "findPersistent"}
+            });
+            
+            (window.global) || (window.global = {});
+            
+            global.htmlEditor = htmlEditor;
+            global.jsEditor = jsEditor;
+            
+        </script>
+        <%- include footer %>
+        
+    </body>
+</html>
